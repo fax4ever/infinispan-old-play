@@ -49,4 +49,21 @@ public class CacheManagerProducer {
 
 	}
 
+	// wrong configuration => Cluster Counters requires Transport
+	public EmbeddedCacheManager produceNoTransportCache() {
+
+		GlobalConfigurationBuilder globalBuilder = new GlobalConfigurationBuilder().nonClusteredDefault();
+
+		globalBuilder.addModule( CounterManagerConfigurationBuilder.class )
+			.numOwner(2)
+			.reliability( Reliability.CONSISTENT )
+			.addStrongCounter()
+				.name( COUNTER_NAME )
+				.initialValue( 0 )
+				.storage( Storage.VOLATILE );
+
+		return new DefaultCacheManager( globalBuilder.build() );
+
+	}
+
 }

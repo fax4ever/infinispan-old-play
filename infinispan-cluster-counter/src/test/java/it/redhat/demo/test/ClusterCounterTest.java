@@ -1,5 +1,6 @@
 package it.redhat.demo.test;
 
+import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -33,6 +34,13 @@ public class ClusterCounterTest {
 	public static void beforeClass() {
 
 		cacheManager = new CacheManagerProducer().produce();
+
+	}
+
+	@AfterClass
+	public static void afterClass() {
+
+		cacheManager.stop();
 
 	}
 
