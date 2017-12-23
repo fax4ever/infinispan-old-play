@@ -55,7 +55,7 @@ public class CacheManagerProducer {
 		GlobalConfigurationBuilder globalBuilder = new GlobalConfigurationBuilder().nonClusteredDefault();
 
 		globalBuilder.addModule( CounterManagerConfigurationBuilder.class )
-			.numOwner(2)
+			.numOwner(1)
 			.reliability( Reliability.CONSISTENT )
 			.addStrongCounter()
 				.name( COUNTER_NAME )
