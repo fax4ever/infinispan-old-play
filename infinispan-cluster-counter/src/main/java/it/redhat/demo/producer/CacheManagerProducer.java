@@ -1,5 +1,7 @@
 package it.redhat.demo.producer;
 
+import java.io.IOException;
+
 import org.infinispan.configuration.cache.Configuration;
 import org.infinispan.configuration.cache.ConfigurationBuilder;
 import org.infinispan.configuration.global.GlobalConfigurationBuilder;
@@ -64,6 +66,15 @@ public class CacheManagerProducer {
 
 		return new DefaultCacheManager( globalBuilder.build() );
 
+	}
+
+	public EmbeddedCacheManager produceFromFile() {
+		try {
+			return new DefaultCacheManager("infinispan-dist.xml");
+		}
+		catch (IOException e) {
+			throw new RuntimeException( "Error opening file infinispan-dist.xml", e);
+		}
 	}
 
 }
