@@ -131,7 +131,7 @@ public class ClusterCounterTest {
 		CounterManager counterManager = EmbeddedCounterManagerFactory.asCounterManager( cacheManager );
 
 		// adding a runtime counter
-		final String hibernate_ogm_runtime_counter = "HIBERNATE_OGM_RUNTIME_COUNTER";
+		final String hibernate_ogm_runtime_counter = "HIBERNATE_OGM_RUNTIME_COUNTER_2";
 
 		boolean outcome = counterManager.defineCounter(
 			hibernate_ogm_runtime_counter,
