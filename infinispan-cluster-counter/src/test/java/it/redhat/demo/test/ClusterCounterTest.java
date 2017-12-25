@@ -19,7 +19,9 @@ import it.redhat.demo.producer.CacheManagerProducer;
 
 import static it.redhat.demo.producer.CacheManagerProducer.COUNTER_NAME;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
 /**
@@ -119,6 +121,35 @@ public class ClusterCounterTest {
 		newValue = strongCounter.incrementAndGet().get();
 		// then 3
 		assertEquals( 3l, newValue.longValue() );
+
+	}
+
+	@Test
+	public void test_runtimeCounter_defineTwoTimes() throws Exception {
+
+		// given a strong counter
+		CounterManager counterManager = EmbeddedCounterManagerFactory.asCounterManager( cacheManager );
+
+		// adding a runtime counter
+		final String hibernate_ogm_runtime_counter = "HIBERNATE_OGM_RUNTIME_COUNTER";
+
+		boolean outcome = counterManager.defineCounter(
+			hibernate_ogm_runtime_counter,
+				CounterConfiguration.builder( CounterType.UNBOUNDED_STRONG )
+					.initialValue( 0 )
+					.storage( Storage.VOLATILE )
+					.build()
+		);
+
+		assertTrue(outcome);
+
+		outcome = counterManager.defineCounter( hibernate_ogm_runtime_counter,
+			  CounterConfiguration.builder( CounterType.UNBOUNDED_STRONG )
+				  .initialValue( 0 )
+				  .storage( Storage.VOLATILE )
+				  .build());
+
+		assertFalse(outcome);
 
 	}
 
