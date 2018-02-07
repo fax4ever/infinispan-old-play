@@ -17,8 +17,9 @@ import org.slf4j.Logger;
 public class CacheManagerProducer {
 
     private static final String DEFAULT_HOTROD_BIND_ADDRESS = "127.0.0.1";
-    private static final int DEFAULT_HOTROD_PORT = 11322;
+    private static final int DEFAULT_HOTROD_PORT = 11372;
 
+    @Inject
     private Logger log;
 
     @Produces
@@ -29,7 +30,7 @@ public class CacheManagerProducer {
 				.host(DEFAULT_HOTROD_BIND_ADDRESS).port(DEFAULT_HOTROD_PORT)
 			.build();
 
-        //log.trace("remote cache manager :: produce");
+        log.trace("remote cache manager :: produce");
 
         return new RemoteCacheManager( config );
 

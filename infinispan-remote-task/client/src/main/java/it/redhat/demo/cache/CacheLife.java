@@ -1,6 +1,5 @@
 package it.redhat.demo.cache;
 
-import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
 import javax.ejb.Singleton;
@@ -9,6 +8,8 @@ import javax.inject.Inject;
 
 import org.infinispan.client.hotrod.RemoteCacheManager;
 
+import org.slf4j.Logger;
+
 /**
  * @author Fabio Massimo Ercoli
  */
@@ -16,6 +17,7 @@ import org.infinispan.client.hotrod.RemoteCacheManager;
 @Startup
 public class CacheLife {
 
+	@Inject
 	private Logger log;
 
 	@Inject
@@ -23,13 +25,13 @@ public class CacheLife {
 
 	@PostConstruct
 	private void onStartup() {
-		//log.info( "Staring Service..." );
+		log.info( "Staring Service..." );
 		cacheManager.start();
 	}
 
 	@PreDestroy
 	private void onShutdown() {
-		//log.info( "Shutting Service..." );
+		log.info( "Shutting Service..." );
 		cacheManager.stop();
 	}
 

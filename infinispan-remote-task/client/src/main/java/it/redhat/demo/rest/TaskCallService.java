@@ -7,6 +7,7 @@
 package it.redhat.demo.rest;
 
 import java.util.HashMap;
+import javax.ejb.Stateless;
 import javax.inject.Inject;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
@@ -19,10 +20,12 @@ import org.slf4j.Logger;
  * @author Fabio Massimo Ercoli
  */
 @Path( "/" )
-public class RestService {
+@Stateless
+public class TaskCallService {
 
-	public static final String REMOTE_TASK_NAME = "logModelPojo";
+	public static final String REMOTE_TASK_NAME = "myRemoteTask";
 
+	@Inject
 	private Logger log;
 
 	@Inject
@@ -37,10 +40,10 @@ public class RestService {
 	@Path( "task" )
 	public void invokeRemoteTask() {
 
-		//log.info( "execute task {} on cache: {}", REMOTE_TASK_NAME, cache.getName() );
+		log.info( "execute task {} on cache: {}", REMOTE_TASK_NAME, cache.getName() );
 		HashMap params = new HashMap();
 		Object result = cache.execute( REMOTE_TASK_NAME, params );
-		//log.info("with outcome {}", result);
+		log.info("with outcome {}", result);
 
 	}
 
