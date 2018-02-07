@@ -13,6 +13,7 @@
         <module>model</module>
         <module>client</module>
         <module>server</module>
+        <module>integration</module>
     </modules>
 
     <properties>
@@ -49,6 +50,8 @@
     </dependencyManagement>
 
     <build>
+        <finalName>${artifactId}</finalName>
+
         <pluginManagement>
             <plugins>
                 <plugin>
