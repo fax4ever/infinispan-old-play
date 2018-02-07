@@ -18,7 +18,6 @@ public class CacheProducer {
 
     private static final String CACHE_NAME = "application-cache";
 
-    @Inject
     private Logger log;
 
     @Inject
@@ -27,7 +26,7 @@ public class CacheProducer {
     @Produces
     public RemoteCache<String, String> getCache() {
 
-        log.trace( "simple remote cache {} :: produce", CACHE_NAME );
+        //log.trace( "simple remote cache {} :: produce", CACHE_NAME );
         return cacheContainer.<String, String>getCache( CACHE_NAME ).withFlags( Flag.FORCE_RETURN_VALUE );
 
     }

@@ -16,7 +16,6 @@ import org.infinispan.client.hotrod.RemoteCacheManager;
 @Startup
 public class CacheLife {
 
-	@Inject
 	private Logger log;
 
 	@Inject
@@ -24,13 +23,13 @@ public class CacheLife {
 
 	@PostConstruct
 	private void onStartup() {
-		log.info( "Staring Service..." );
+		//log.info( "Staring Service..." );
 		cacheManager.start();
 	}
 
 	@PreDestroy
 	private void onShutdown() {
-		log.info( "Shutting Service..." );
+		//log.info( "Shutting Service..." );
 		cacheManager.stop();
 	}
 
