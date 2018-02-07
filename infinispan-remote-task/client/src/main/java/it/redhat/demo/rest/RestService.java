@@ -38,9 +38,9 @@ public class RestService {
 	@Path( "task" )
 	public void invokeRemoteTask() {
 
-		log.info( "execute task {} on cache: {}", REMOTE_TASK_NAME, cache.getName());
+		log.info( "execute task {} on cache: {}", REMOTE_TASK_NAME, cache.getName() );
 		HashMap params = new HashMap();
-		Object result = cache.execute( REMOTE_TASK_NAME, params);
+		Object result = cache.execute( REMOTE_TASK_NAME, params );
 		log.info("with outcome {}", result);
 
 	}
