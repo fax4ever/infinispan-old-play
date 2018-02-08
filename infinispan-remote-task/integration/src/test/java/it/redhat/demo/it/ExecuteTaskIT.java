@@ -71,6 +71,24 @@ public class ExecuteTaskIT {
 
 	@Test
 	@RunAsClient
+	public void test_updateCache() {
+
+		ClientBuilder.newClient()
+				.target( deploymentURL.toString() )
+				.path( "ciao" )
+				.request().put( Entity.text( "" ), String.class );
+
+		String oldvalue = ClientBuilder.newClient()
+				.target( deploymentURL.toString() )
+				.path( "ciao-newvalue" )
+				.request().put( Entity.text( "" ), String.class );
+
+		assertEquals("ciao", oldvalue);
+
+	}
+
+	/*@Test
+	@RunAsClient*/
 	public void test_executeTask() {
 
 		String response = ClientBuilder.newClient()

@@ -67,8 +67,8 @@
             <scope>provided</scope>
         </dependency>
         <dependency>
-            <groupId>org.infinispan.protostream</groupId>
-            <artifactId>protostream</artifactId>
+            <groupId>org.infinispan</groupId>
+            <artifactId>infinispan-remote-query-client</artifactId>
             <scope>provided</scope>
         </dependency>
 
