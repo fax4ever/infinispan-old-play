@@ -11,7 +11,7 @@ import org.slf4j.LoggerFactory;
  */
 public class MyRemoteTask implements ServerTask {
 
-    private static final Logger log = LoggerFactory.getLogger( MyRemoteTask.class);
+    private static final Logger log = LoggerFactory.getLogger( MyRemoteTask.class );
     public static final String TASK_NAME = "myRemoteTask";
 
     @Override

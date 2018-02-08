@@ -15,6 +15,10 @@
         <!-- Wildfly Application Server -->
         <version.wildfly>11.0.0.Final</version.wildfly>
 
+        <version.slf4j>1.7.7.redhat-2</version.slf4j>
+        <version.apache.http.client>4.5.3</version.apache.http.client>
+        <version.apache.commons.io>2.5</version.apache.commons.io>
+
         <!-- managed server directories -->
         <jboss.home>${project.build.directory}/wildfly-${version.wildfly}</jboss.home>
         <infinispan.home>${project.build.directory}/infinispan-server-${version.infinispan}</infinispan.home>
@@ -70,10 +74,25 @@
             <scope>test</scope>
         </dependency>
 
+        <!-- Rest Client -->
         <dependency>
-            <groupId>org.slf4j</groupId>
-            <artifactId>slf4j-api</artifactId>
-            <scope>provided</scope>
+            <groupId>org.jboss.resteasy</groupId>
+            <artifactId>resteasy-client</artifactId>
+            <scope>test</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.apache.httpcomponents</groupId>
+            <artifactId>httpclient</artifactId>
+            <version>${version.apache.http.client}</version>
+            <scope>test</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>commons-io</groupId>
+            <artifactId>commons-io</artifactId>
+            <version>${version.apache.commons.io}</version>
+            <scope>test</scope>
         </dependency>
 
     </dependencies>
@@ -164,26 +183,6 @@
                             <resources>
                                 <resource>
                                     <directory>${basedir}/src/test/resources/infinispan-server-config</directory>
-                                </resource>
-                            </resources>
-                        </configuration>
-                    </execution>
-                    <!-- Copy the task -->
-                    <execution>
-                        <id>deploy-infinispan-server-task</id>
-                        <phase>process-test-resources</phase>
-                        <goals>
-                            <goal>copy-resources</goal>
-                        </goals>
-                        <configuration>
-                            <outputDirectory>${infinispan.home}/standalone/deployments</outputDirectory>
-                            <overwrite>true</overwrite>
-                            <resources>
-                                <resource>
-                                    <directory>${basedir}/../server/target</directory>
-                                    <includes>
-                                        <include>task-server-jar-with-dependencies.jar</include>
-                                    </includes>
                                 </resource>
                             </resources>
                         </configuration>
