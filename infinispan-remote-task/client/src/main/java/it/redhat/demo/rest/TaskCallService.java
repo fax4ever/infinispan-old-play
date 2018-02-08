@@ -19,6 +19,8 @@ import org.infinispan.client.hotrod.RemoteCache;
 
 import org.slf4j.Logger;
 
+import it.redhat.demo.model.Project;
+
 /**
  * @author Fabio Massimo Ercoli
  */
@@ -27,13 +29,12 @@ import org.slf4j.Logger;
 public class TaskCallService {
 
 	public static final String REMOTE_TASK_NAME = "myRemoteTask";
-	public static final String KEY_NAME = "Key";
 
 	@Inject
 	private Logger log;
 
 	@Inject
-	private RemoteCache<String, String> cache;
+	private RemoteCache<String, Project> cache;
 
 	@GET
 	public String ciao() {
@@ -56,10 +57,15 @@ public class TaskCallService {
 	@Path( "{value}" )
 	public String insertReturnOldValue( @PathParam( "value" ) String value) {
 
-		String oldValue = cache.get( KEY_NAME );
-		cache.put( KEY_NAME, value );
+		Project project = new Project();
+		project.setCode( 1 );
+		project.setDescription( value );
+		project.setName( value );
 
-		return oldValue;
+		cache.put( value, project );
+		project = cache.get( value );
+
+		return project.getName();
 
 	}
 

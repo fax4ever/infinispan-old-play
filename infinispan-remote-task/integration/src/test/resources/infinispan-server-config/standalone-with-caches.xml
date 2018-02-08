@@ -102,11 +102,7 @@
                     <locking acquire-timeout="30000" concurrency-level="1000" striping="false"/>
                     <transaction mode="NON_XA" locking="PESSIMISTIC"/>
                 </distributed-cache>
-                <!-- Currently the needed caches need to be enabled server-side (can't be created from the client) -->
-                <local-cache name="Club" />
-                <local-cache name="Athlete" />
-                <local-cache name="ClubEmployee" />
-                <local-cache name="hibernate_sequences" />
+                <local-cache name="projects" />
             </cache-container>
         </subsystem>
         <subsystem xmlns="urn:infinispan:server:endpoint:8.0">
