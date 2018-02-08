@@ -7,6 +7,7 @@
 package it.redhat.demo.model;
 
 import java.io.Serializable;
+import java.util.Objects;
 
 import org.infinispan.protostream.annotations.ProtoField;
 import org.infinispan.protostream.annotations.ProtoMessage;
@@ -49,6 +50,30 @@ public class Project implements Serializable {
 
 	public void setDescription(String description) {
 		this.description = description;
+	}
+
+	@Override
+	public boolean equals(Object o) {
+		if ( this == o ) return true;
+		if ( o == null || getClass() != o.getClass() ) return false;
+		Project project = (Project) o;
+		return Objects.equals( code, project.code ) &&
+				Objects.equals( name, project.name ) &&
+				Objects.equals( description, project.description );
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash( code, name, description );
+	}
+
+	@Override
+	public String toString() {
+		return "Project{" +
+				"code=" + code +
+				", name='" + name + '\'' +
+				", description='" + description + '\'' +
+				'}';
 	}
 
 }

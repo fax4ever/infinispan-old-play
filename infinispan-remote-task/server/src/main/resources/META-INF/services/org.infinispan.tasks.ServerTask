@@ -1,1 +1,2 @@
-it.redhat.demo.task.MyRemoteTask
+it.redhat.demo.task.CiaoRemoteTask
+it.redhat.demo.task.IncrementProjectCodeTask
