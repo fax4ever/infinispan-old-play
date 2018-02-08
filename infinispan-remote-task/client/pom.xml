@@ -66,6 +66,11 @@
             <artifactId>infinispan-client-hotrod</artifactId>
             <scope>provided</scope>
         </dependency>
+        <dependency>
+            <groupId>org.infinispan.protostream</groupId>
+            <artifactId>protostream</artifactId>
+            <scope>provided</scope>
+        </dependency>
 
         <!-- LOG -->
         <dependency>
