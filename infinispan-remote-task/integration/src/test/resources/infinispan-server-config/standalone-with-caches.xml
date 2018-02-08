@@ -102,7 +102,9 @@
                     <locking acquire-timeout="30000" concurrency-level="1000" striping="false"/>
                     <transaction mode="NON_XA" locking="PESSIMISTIC"/>
                 </distributed-cache>
-                <local-cache name="projects" />
+                <local-cache name="projects">
+                    <compatibility />
+                </local-cache>
             </cache-container>
         </subsystem>
         <subsystem xmlns="urn:infinispan:server:endpoint:8.0">

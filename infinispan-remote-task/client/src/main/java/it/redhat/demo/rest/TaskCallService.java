@@ -6,7 +6,9 @@
  */
 package it.redhat.demo.rest;
 
-import java.util.HashMap;
+import java.util.Collections;
+import java.util.List;
+import java.util.Map;
 import javax.ejb.Stateless;
 import javax.inject.Inject;
 import javax.ws.rs.GET;
@@ -19,6 +21,8 @@ import org.infinispan.client.hotrod.RemoteCache;
 
 import org.slf4j.Logger;
 
+import it.redhat.demo.cache.JBossMarshalling;
+import it.redhat.demo.cache.ProtoStream;
 import it.redhat.demo.model.Project;
 
 /**
@@ -34,7 +38,12 @@ public class TaskCallService {
 	private Logger log;
 
 	@Inject
+	@JBossMarshalling
 	private RemoteCache<String, Project> cache;
+
+	@Inject
+	@ProtoStream
+	private RemoteCache<String, Project> protoCache;
 
 	@GET
 	public String ciao() {
@@ -45,11 +54,11 @@ public class TaskCallService {
 	public Object invokeRemoteTask() {
 
 		log.info( "execute task {} on cache: {}", REMOTE_TASK_NAME, cache.getName() );
-		HashMap params = new HashMap();
-		Object result = cache.execute( REMOTE_TASK_NAME, params );
-		log.info("with outcome {}", result);
 
-		return result;
+		String execute = cache.execute( REMOTE_TASK_NAME, Collections.emptyMap() );
+		log.info("with outcome {}", execute);
+
+		return execute;
 
 	}
 
@@ -62,8 +71,8 @@ public class TaskCallService {
 		project.setDescription( value );
 		project.setName( value );
 
-		cache.put( value, project );
-		project = cache.get( value );
+		protoCache.put( value, project );
+		project = protoCache.get( value );
 
 		return project.getName();
 

@@ -82,8 +82,8 @@ public class ExecuteTaskIT {
 
 	}
 
-	/*@Test
-	@RunAsClient*/
+	@Test
+	@RunAsClient
 	public void test_executeTask() {
 
 		String response = ClientBuilder.newClient()

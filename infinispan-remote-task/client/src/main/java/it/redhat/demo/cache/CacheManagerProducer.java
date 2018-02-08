@@ -25,30 +25,31 @@ public class CacheManagerProducer {
 
 	private static final String DEFAULT_HOTROD_BIND_ADDRESS = "127.0.0.1";
     private static final int DEFAULT_HOTROD_PORT = 11372;
-
-	private static final String PROTO_SCHEMA_NAME = "twb.proto";
+	private static final String PROTO_SCHEMA_NAME = "schema.proto";
 
 	@Inject
     private Logger log;
 
-	// not used
+	@Produces
+	@JBossMarshalling
 	public RemoteCacheManager getStandardCacheManager() {
+
+		log.trace("remote cache manager :: produce");
 
 		Configuration config = new ConfigurationBuilder()
 				.addServer()
 				.host(DEFAULT_HOTROD_BIND_ADDRESS).port(DEFAULT_HOTROD_PORT)
 				.build();
 
-		log.trace("remote cache manager :: produce");
-
 		return new RemoteCacheManager( config );
 
 	}
 
     @Produces
+	@ProtoStream
     public RemoteCacheManager getProtoCacheManager() {
 
-		log.trace("remote cache manager :: producing");
+		log.trace("remote cache manager :: produce");
 
 		ProtoStreamMarshaller marshaller = new ProtoStreamMarshaller();
 
@@ -60,13 +61,13 @@ public class CacheManagerProducer {
 			.build();
 
 		RemoteCacheManager remoteCacheManager = new RemoteCacheManager( config );
-		configureProtobufMarshaller( marshaller.getSerializationContext(), remoteCacheManager );
+		configureProtoMarshaller( marshaller.getSerializationContext(), remoteCacheManager );
 
 		return remoteCacheManager;
 
     }
 
-	private void configureProtobufMarshaller(SerializationContext serCtx, RemoteCacheManager remoteCacheManager) {
+	private void configureProtoMarshaller(SerializationContext serCtx, RemoteCacheManager remoteCacheManager) {
 		ProtoSchemaBuilder protoSchemaBuilder = new ProtoSchemaBuilder();
 		try {
 			String generatedSchema = protoSchemaBuilder.fileName( PROTO_SCHEMA_NAME )
