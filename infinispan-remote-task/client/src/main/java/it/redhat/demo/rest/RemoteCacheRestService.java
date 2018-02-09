@@ -8,10 +8,10 @@ package it.redhat.demo.rest;
 
 import javax.ejb.Stateless;
 import javax.inject.Inject;
-import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
+import javax.ws.rs.Produces;
 
 import org.infinispan.client.hotrod.RemoteCache;
 
@@ -36,7 +36,8 @@ public class RemoteCacheRestService {
 
 	@POST
 	@Path( "project/{projectName}" )
-	public String insertProject( @PathParam( "projectName" ) String projectName) {
+	@Produces( "application/json" )
+	public Project insertProject( @PathParam( "projectName" ) String projectName) {
 
 		Project project = new Project();
 		project.setCode( 1 );
@@ -48,7 +49,7 @@ public class RemoteCacheRestService {
 
 		log.info( "Created new project {} with code 1 {}", projectName, project );
 
-		return project.getName();
+		return project;
 
 	}
 

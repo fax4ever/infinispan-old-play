@@ -13,6 +13,7 @@ import javax.ws.rs.GET;
 import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
+import javax.ws.rs.Produces;
 
 import org.infinispan.client.hotrod.RemoteCache;
 
@@ -53,7 +54,8 @@ public class RemoteTaskRestService {
 
 	@PUT
 	@Path( "project/{projectName}" )
-	public Integer incrementProjectCode( @PathParam( "projectName" ) String projectName ) {
+	@Produces( "application/json" )
+	public Project incrementProjectCode( @PathParam( "projectName" ) String projectName ) {
 
 		log.info( "execute task IncrementProjectCodeTask on cache {} on project {}", cache.getName(), projectName );
 
@@ -61,7 +63,7 @@ public class RemoteTaskRestService {
 
 		log.info( "result: {}", result );
 
-		return (result == null) ? 0 : result.getCode();
+		return result;
 
 	}
 

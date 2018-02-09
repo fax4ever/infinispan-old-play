@@ -15,12 +15,13 @@ import org.jboss.arquillian.container.test.api.OperateOnDeployment;
 import org.jboss.arquillian.container.test.api.RunAsClient;
 import org.jboss.arquillian.container.test.api.TargetsContainer;
 import org.jboss.arquillian.junit.Arquillian;
-import org.jboss.arquillian.junit.InSequence;
 import org.jboss.arquillian.test.api.ArquillianResource;
 import org.jboss.shrinkwrap.api.ShrinkWrap;
 import org.jboss.shrinkwrap.api.spec.JavaArchive;
 import org.jboss.shrinkwrap.api.spec.WebArchive;
 import org.jboss.shrinkwrap.resolver.api.maven.Maven;
+
+import it.redhat.demo.model.Project;
 
 /**
  * @author Fabio Massimo Ercoli
@@ -72,21 +73,21 @@ public class ExecuteTaskIT {
 	@RunAsClient
 	public void test_insertProject() {
 
-		String name = ClientBuilder.newClient()
+		Project project = ClientBuilder.newClient()
 			.target( deploymentURL.toString() )
 			.path( "cache" )
 			.path( "project" )
 			.path( "HibernateOGM" )
-			.request().post( Entity.text( "" ), String.class );
+			.request().post( Entity.text( "" ), Project.class );
 
-		assertEquals("HibernateOGM", name);
+		assertEquals("HibernateOGM", project.getName());
 
-		Integer response = ClientBuilder.newClient()
+		project = ClientBuilder.newClient()
 				.target( deploymentURL.toString() )
 				.path( "task" )
 				.path( "project" )
-				.path( "HibernateOGM" )
-				.request().put( Entity.text( "" ), Integer.class );
+				.path( project.getName() )
+				.request().put( Entity.text( "" ), Project.class );
 
 		//assertEquals( new Integer( 2 ), response );
 
