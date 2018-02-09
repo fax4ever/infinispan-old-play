@@ -145,6 +145,24 @@
                             </artifactItems>
                         </configuration>
                     </execution>
+                    <execution>
+                        <id>copy</id>
+                        <phase>pre-integration-test</phase>
+                        <goals>
+                            <goal>copy</goal>
+                        </goals>
+                        <configuration>
+                            <artifactItems>
+                                <artifactItem>
+                                    <groupId>it.redhat.demo</groupId>
+                                    <artifactId>task-model</artifactId>
+                                    <version>${project.version}</version>
+                                    <type>jar</type>
+                                    <outputDirectory>${infinispan.home}/modules/it/redhat/demo/taskmodel/main</outputDirectory>
+                                </artifactItem>
+                            </artifactItems>
+                        </configuration>
+                    </execution>
                 </executions>
             </plugin>
 
@@ -183,6 +201,40 @@
                             <resources>
                                 <resource>
                                     <directory>${basedir}/src/test/resources/infinispan-server-config</directory>
+                                </resource>
+                            </resources>
+                        </configuration>
+                    </execution>
+                    <!-- Create infinispan static module for task-model -->
+                    <execution>
+                        <id>add task model module</id>
+                        <phase>process-test-resources</phase>
+                        <goals>
+                            <goal>copy-resources</goal>
+                        </goals>
+                        <configuration>
+                            <outputDirectory>${infinispan.home}/modules/it/redhat/demo/taskmodel/main</outputDirectory>
+                            <overwrite>true</overwrite>
+                            <resources>
+                                <resource>
+                                    <directory>${basedir}/src/test/resources/model-module</directory>
+                                </resource>
+                            </resources>
+                        </configuration>
+                    </execution>
+                    <!-- Update infinispan static module for task-model -->
+                    <execution>
+                        <id>update infinispan static module</id>
+                        <phase>pre-integration-test</phase>
+                        <goals>
+                            <goal>copy-resources</goal>
+                        </goals>
+                        <configuration>
+                            <outputDirectory>${infinispan.home}/modules/system/layers/base/org/infinispan/main</outputDirectory>
+                            <overwrite>true</overwrite>
+                            <resources>
+                                <resource>
+                                    <directory>${basedir}/src/test/resources/infinispan-module</directory>
                                 </resource>
                             </resources>
                         </configuration>

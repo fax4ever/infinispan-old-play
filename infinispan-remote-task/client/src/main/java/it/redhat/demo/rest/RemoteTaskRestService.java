@@ -61,7 +61,7 @@ public class RemoteTaskRestService {
 
 		log.info( "result: {}", result );
 
-		return result.getCode();
+		return (result == null) ? 0 : result.getCode();
 
 	}
 

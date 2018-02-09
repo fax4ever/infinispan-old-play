@@ -56,7 +56,6 @@ public class ExecuteTaskIT {
 
 	@Test
 	@RunAsClient
-	@InSequence(1)
 	public void test_ciaoRemoteTask() {
 
 		String response = ClientBuilder.newClient()
@@ -71,7 +70,6 @@ public class ExecuteTaskIT {
 
 	@Test
 	@RunAsClient
-	@InSequence(2)
 	public void test_insertProject() {
 
 		String name = ClientBuilder.newClient()
@@ -83,6 +81,16 @@ public class ExecuteTaskIT {
 
 		assertEquals("HibernateOGM", name);
 
+		Integer response = ClientBuilder.newClient()
+				.target( deploymentURL.toString() )
+				.path( "task" )
+				.path( "project" )
+				.path( "HibernateOGM" )
+				.request().put( Entity.text( "" ), Integer.class );
+
+		//assertEquals( new Integer( 2 ), response );
+
 	}
+
 
 }

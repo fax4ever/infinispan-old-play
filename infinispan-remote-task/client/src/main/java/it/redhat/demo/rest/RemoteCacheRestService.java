@@ -8,6 +8,7 @@ package it.redhat.demo.rest;
 
 import javax.ejb.Stateless;
 import javax.inject.Inject;
+import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
@@ -35,7 +36,7 @@ public class RemoteCacheRestService {
 
 	@POST
 	@Path( "project/{projectName}" )
-	public String insertReturnOldValue( @PathParam( "projectName" ) String projectName) {
+	public String insertProject( @PathParam( "projectName" ) String projectName) {
 
 		Project project = new Project();
 		project.setCode( 1 );
