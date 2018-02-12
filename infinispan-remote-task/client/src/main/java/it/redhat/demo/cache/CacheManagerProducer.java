@@ -37,9 +37,9 @@ public class CacheManagerProducer {
 		log.trace("remote cache manager :: produce");
 
 		Configuration config = new ConfigurationBuilder()
-				.addServer()
-				.host(DEFAULT_HOTROD_BIND_ADDRESS).port(DEFAULT_HOTROD_PORT)
-				.build();
+			.addServer()
+			.host(DEFAULT_HOTROD_BIND_ADDRESS).port(DEFAULT_HOTROD_PORT)
+			.build();
 
 		return new RemoteCacheManager( config );
 

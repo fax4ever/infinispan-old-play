@@ -8,6 +8,7 @@ package it.redhat.demo.rest;
 
 import javax.ejb.Stateless;
 import javax.inject.Inject;
+import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
@@ -33,6 +34,19 @@ public class RemoteCacheRestService {
 	@Inject
 	@ProtoStream
 	private RemoteCache<String, Project> protoCache;
+
+	@GET
+	@Path( "project/{projectName}" )
+	@Produces( "application/json" )
+	public Project getProject( @PathParam( "projectName" ) String projectName) {
+
+		Project project = protoCache.get( projectName );
+
+		log.info( "Getting new project {} with code 1 {}", projectName, project );
+
+		return project;
+
+	}
 
 	@POST
 	@Path( "project/{projectName}" )

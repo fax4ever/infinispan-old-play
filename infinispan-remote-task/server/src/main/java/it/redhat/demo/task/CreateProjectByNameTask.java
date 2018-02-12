@@ -18,9 +18,9 @@ import it.redhat.demo.model.Project;
 /**
  * @author Fabio Massimo Ercoli
  */
-public class IncrementProjectCodeTask implements ServerTask<Project> {
+public class CreateProjectByNameTask implements ServerTask<Project> {
 
-	private static final Logger LOG = LoggerFactory.getLogger( IncrementProjectCodeTask.class );
+	private static final Logger LOG = LoggerFactory.getLogger( CreateProjectByNameTask.class );
 
 	private static final String CACHE_NAME = "projects";
 	private static final String CACHE_PARAM_KEY = "name";
@@ -29,7 +29,7 @@ public class IncrementProjectCodeTask implements ServerTask<Project> {
 
 	@Override
 	public String getName() {
-		return IncrementProjectCodeTask.class.getSimpleName();
+		return CreateProjectByNameTask.class.getSimpleName();
 	}
 
 	@Override
@@ -43,19 +43,15 @@ public class IncrementProjectCodeTask implements ServerTask<Project> {
 		Cache<String, Project> cache = taskContext.getCacheManager().getCache( CACHE_NAME );
 		String projectName = (String) taskContext.getParameters().get().get( CACHE_PARAM_KEY );
 
-		LOG.info( "Executing task. Updating project: {}", projectName );
+		LOG.info( "Executing task {}. Creating project: {}", getName(), projectName );
 
-		Project project = cache.get( projectName );
+		Project project = new Project();
+		project.setCode( 1 );
+		project.setDescription( projectName );
+		project.setName( projectName );
 
-		if (project == null) {
-			LOG.warn( "Cache Entry Project not found!" );
-			return null;
-		}
-
-		project.setCode( project.getCode() + 1 );
-		cache.put( projectName, project );
-
-		LOG.info( "Executed task. Project {} updated", projectName );
+		project = cache.put( projectName, project );
+		LOG.info( "Executed task {}. Project {} created", getName(), projectName );
 
 		return project;
 	}

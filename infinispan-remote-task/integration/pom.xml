@@ -171,6 +171,24 @@
                                     <artifactId>task-model</artifactId>
                                     <version>${project.version}</version>
                                     <type>jar</type>
+                                    <outputDirectory>${jboss.home}/modules/it/redhat/demo/taskmodel/main</outputDirectory>
+                                </artifactItem>
+                            </artifactItems>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>copy client</id>
+                        <phase>pre-integration-test</phase>
+                        <goals>
+                            <goal>copy</goal>
+                        </goals>
+                        <configuration>
+                            <artifactItems>
+                                <artifactItem>
+                                    <groupId>it.redhat.demo</groupId>
+                                    <artifactId>task-model</artifactId>
+                                    <version>${project.version}</version>
+                                    <type>jar</type>
                                     <outputDirectory>${infinispan.home}/modules/it/redhat/demo/taskmodel/main</outputDirectory>
                                 </artifactItem>
                             </artifactItems>
@@ -220,7 +238,24 @@
                     </execution>
                     <!-- Create infinispan static module for task-model -->
                     <execution>
-                        <id>add task model module</id>
+                        <id>add task model module jboss</id>
+                        <phase>process-test-resources</phase>
+                        <goals>
+                            <goal>copy-resources</goal>
+                        </goals>
+                        <configuration>
+                            <outputDirectory>${jboss.home}/modules/it/redhat/demo/taskmodel/main</outputDirectory>
+                            <overwrite>true</overwrite>
+                            <resources>
+                                <resource>
+                                    <directory>${basedir}/src/test/resources/model-client-module</directory>
+                                </resource>
+                            </resources>
+                        </configuration>
+                    </execution>
+                    <!-- Create infinispan static module for task-model -->
+                    <execution>
+                        <id>add task model module infinispan</id>
                         <phase>process-test-resources</phase>
                         <goals>
                             <goal>copy-resources</goal>
@@ -248,6 +283,24 @@
                             <resources>
                                 <resource>
                                     <directory>${basedir}/src/test/resources/infinispan-module</directory>
+                                </resource>
+                            </resources>
+                        </configuration>
+                    </execution>
+
+                    <!-- Update infinispan static module for task-model -->
+                    <execution>
+                        <id>update infinispan common client static module</id>
+                        <phase>pre-integration-test</phase>
+                        <goals>
+                            <goal>copy-resources</goal>
+                        </goals>
+                        <configuration>
+                            <outputDirectory>${jboss.home}/modules/org/infinispan/commons/ispn-9.1</outputDirectory>
+                            <overwrite>true</overwrite>
+                            <resources>
+                                <resource>
+                                    <directory>${basedir}/src/test/resources/infinispan-common-client-module</directory>
                                 </resource>
                             </resources>
                         </configuration>

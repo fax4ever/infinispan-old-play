@@ -10,6 +10,7 @@ import java.util.Collections;
 import javax.ejb.Stateless;
 import javax.inject.Inject;
 import javax.ws.rs.GET;
+import javax.ws.rs.POST;
 import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
@@ -45,6 +46,36 @@ public class RemoteTaskRestService {
 		log.info( "execute task CiaoRemoteTask on cache {}", cache.getName() );
 
 		String result = cache.execute( "CiaoRemoteTask", Collections.emptyMap() );
+
+		log.info( "result: {}", result );
+
+		return result;
+
+	}
+
+	@GET
+	@Path( "project/{projectName}" )
+	@Produces( "application/json" )
+	public Project getProjectByNameTask( @PathParam( "projectName" ) String projectName ) {
+
+		log.info( "execute task getProjectByNameTask on cache {} on project {}", cache.getName(), projectName );
+
+		Project result = cache.execute( "GetProjectByNameTask", Collections.singletonMap( "name", projectName ) );
+
+		log.info( "result: {}", result );
+
+		return result;
+
+	}
+
+	@POST
+	@Path( "project/{projectName}" )
+	@Produces( "application/json" )
+	public Project createProjectByNameTask( @PathParam( "projectName" ) String projectName ) {
+
+		log.info( "execute task CreateProjectByNameTask on cache {} on project {}", cache.getName(), projectName );
+
+		Project result = cache.execute( "CreateProjectByNameTask", Collections.singletonMap( "name", projectName ) );
 
 		log.info( "result: {}", result );
 

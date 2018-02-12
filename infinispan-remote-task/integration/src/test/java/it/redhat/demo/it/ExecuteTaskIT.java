@@ -4,8 +4,10 @@ import static org.junit.Assert.assertEquals;
 
 import java.io.File;
 import java.net.URL;
+import javax.ws.rs.client.Client;
 import javax.ws.rs.client.ClientBuilder;
 import javax.ws.rs.client.Entity;
+import javax.ws.rs.client.WebTarget;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -29,7 +31,8 @@ import it.redhat.demo.model.Project;
 @RunWith(Arquillian.class)
 public class ExecuteTaskIT {
 
-	@Deployment(name = "jboss") @TargetsContainer("jboss")
+	@Deployment(name = "jboss")
+	@TargetsContainer("jboss")
 	public static WebArchive getJBossDeployment() {
 
 		File file = Maven.resolver()
@@ -40,7 +43,8 @@ public class ExecuteTaskIT {
 
 	}
 
-	@Deployment(name = "infinispan", testable = false) @TargetsContainer("infinispan")
+	@Deployment(name = "infinispan", testable = false)
+	@TargetsContainer("infinispan")
 	public static JavaArchive getInfinispanDeployment() {
 
 		File file = Maven.resolver()
@@ -52,7 +56,7 @@ public class ExecuteTaskIT {
 	}
 
 	@ArquillianResource
-	@OperateOnDeployment( "jboss" )
+	@OperateOnDeployment("jboss")
 	private URL deploymentURL;
 
 	@Test
@@ -60,36 +64,61 @@ public class ExecuteTaskIT {
 	public void test_ciaoRemoteTask() {
 
 		String response = ClientBuilder.newClient()
-			.target( deploymentURL.toString() )
-			.path( "task" )
-			.path( "ciao" )
-			.request().get( String.class );
+				.target( deploymentURL.toString() )
+				.path( "task" )
+				.path( "ciao" )
+				.request().get( String.class );
 
-		assertEquals("ciao", response);
+		assertEquals( "ciao", response );
 
 	}
 
 	@Test
 	@RunAsClient
-	public void test_insertProject() {
+	public void test_usingCache() {
 
-		Project project = ClientBuilder.newClient()
+		Client client = ClientBuilder.newClient();
+		String projectName = "HibernateOGM";
+
+		WebTarget path = client
 			.target( deploymentURL.toString() )
 			.path( "cache" )
 			.path( "project" )
-			.path( "HibernateOGM" )
-			.request().post( Entity.text( "" ), Project.class );
+			.path( projectName );
 
-		assertEquals("HibernateOGM", project.getName());
+		Project project = path.request()
+			.post( Entity.text( "" ), Project.class );
 
-		project = ClientBuilder.newClient()
-				.target( deploymentURL.toString() )
-				.path( "task" )
-				.path( "project" )
-				.path( project.getName() )
-				.request().put( Entity.text( "" ), Project.class );
+		assertEquals( projectName, project.getName() );
 
-		//assertEquals( new Integer( 2 ), response );
+		project = path.request()
+			.get( Project.class );
+
+		assertEquals( projectName, project.getName() );
+
+	}
+
+	@Test
+	@RunAsClient
+	public void test_usingTask() {
+
+		Client client = ClientBuilder.newClient();
+		String projectName = "HibernateSearch";
+
+		WebTarget path = client
+			.target( deploymentURL.toString() )
+			.path( "task" )
+			.path( "project" )
+			.path( projectName );
+
+		path.request()
+			.post( Entity.text( "" ), Project.class );
+
+		Project project = path.request()
+			.get( Project.class );
+
+		assertEquals( projectName, project.getName() );
+		assertEquals( new Integer(1), project.getCode() );
 
 	}
 

@@ -18,7 +18,7 @@ import it.redhat.demo.model.Project;
 /**
  * @author Fabio Massimo Ercoli
  */
-public class IncrementProjectCodeTask implements ServerTask<Project> {
+public class GetProjectByNameTask implements ServerTask<Project> {
 
 	private static final Logger LOG = LoggerFactory.getLogger( IncrementProjectCodeTask.class );
 
@@ -29,7 +29,7 @@ public class IncrementProjectCodeTask implements ServerTask<Project> {
 
 	@Override
 	public String getName() {
-		return IncrementProjectCodeTask.class.getSimpleName();
+		return GetProjectByNameTask.class.getSimpleName();
 	}
 
 	@Override
@@ -43,7 +43,7 @@ public class IncrementProjectCodeTask implements ServerTask<Project> {
 		Cache<String, Project> cache = taskContext.getCacheManager().getCache( CACHE_NAME );
 		String projectName = (String) taskContext.getParameters().get().get( CACHE_PARAM_KEY );
 
-		LOG.info( "Executing task. Updating project: {}", projectName );
+		LOG.info( "Executing task. Get project: {}", projectName );
 
 		Project project = cache.get( projectName );
 
@@ -52,12 +52,8 @@ public class IncrementProjectCodeTask implements ServerTask<Project> {
 			return null;
 		}
 
-		project.setCode( project.getCode() + 1 );
-		cache.put( projectName, project );
-
-		LOG.info( "Executed task. Project {} updated", projectName );
+		LOG.info( "Executed task. Project {} gotten", projectName );
 
 		return project;
 	}
-
 }

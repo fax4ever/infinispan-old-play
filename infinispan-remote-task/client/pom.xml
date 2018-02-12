@@ -36,6 +36,7 @@
             <groupId>it.redhat.demo</groupId>
             <artifactId>task-model</artifactId>
             <version>${project.version}</version>
+            <scope>provided</scope>
         </dependency>
 
         <!-- JEE -->

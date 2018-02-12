@@ -4,6 +4,7 @@
     <deployment>
         <dependencies>
           <module name="org.infinispan.remote" slot="ispn-9.1" services="export" />
+          <module name="it.redhat.demo.taskmodel"/>
         </dependencies>
     </deployment>
 </jboss-deployment-structure>
