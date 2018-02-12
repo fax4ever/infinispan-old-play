@@ -11,6 +11,9 @@
         <module name="org.jboss.logging"/>
         <module name="org.jboss.marshalling" slot="ispn-9.1" services="import"/>
         <module name="sun.jdk"/>
-        <module name="it.redhat.demo.taskmodel" services="export" export="true"/>
+
+        <!-- task model should be visible to Infinispan commons module in order to marshall the model-->
+        <!-- default marshaller require it -->
+        <module name="it.redhat.demo.taskmodel"/>
     </dependencies>
 </module>

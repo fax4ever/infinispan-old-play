@@ -6,7 +6,9 @@
     </resources>
 
     <dependencies>
+
+        <!-- in order to use protostream marshaller too -->
+        <!-- we have to add this dependency on client (JBoss) model module -->
         <module name="org.infinispan.protostream" slot="ispn-9.1" />
-        <module name="org.infinispan.commons" slot="ispn-9.1" />
     </dependencies>
 </module>

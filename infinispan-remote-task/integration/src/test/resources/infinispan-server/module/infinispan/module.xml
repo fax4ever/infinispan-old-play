@@ -17,6 +17,9 @@
         <module name="org.jboss.marshalling" services="import"/>
         <module name="org.jgroups"/>
         <module name="sun.jdk"/>
-        <module name="it.redhat.demo.taskmodel" services="export" export="true"/>
+
+        <!-- task model should be visible to Infinispan module in order to use the model -->
+        <!-- export true is mandatory because the model should be visible to task-server jar module too-->
+        <module name="it.redhat.demo.taskmodel" export="true"/>
     </dependencies>
 </module>
