@@ -159,7 +159,7 @@
                         </configuration>
                     </execution>
                     <execution>
-                        <id>copy</id>
+                        <id>install-jar-module-jboss</id>
                         <phase>pre-integration-test</phase>
                         <goals>
                             <goal>copy</goal>
@@ -177,7 +177,7 @@
                         </configuration>
                     </execution>
                     <execution>
-                        <id>copy client</id>
+                        <id>install-jar-module-infinispan</id>
                         <phase>pre-integration-test</phase>
                         <goals>
                             <goal>copy</goal>
@@ -202,9 +202,10 @@
                 <artifactId>maven-resources-plugin</artifactId>
                 <version>3.0.2</version>
                 <executions>
-                    <!-- Copy custom JBoss server configuration file -->
+
+                    <!-- Update configurations -->
                     <execution>
-                        <id>configure-jboss-server</id>
+                        <id>update-jboss-config</id>
                         <phase>process-test-resources</phase>
                         <goals>
                             <goal>copy-resources</goal>
@@ -214,14 +215,13 @@
                             <overwrite>true</overwrite>
                             <resources>
                                 <resource>
-                                    <directory>${basedir}/src/test/resources/jboss-server-config</directory>
+                                    <directory>${basedir}/src/test/resources/jboss-server/config</directory>
                                 </resource>
                             </resources>
                         </configuration>
                     </execution>
-                    <!-- Copy custom infinispan server configuration file -->
                     <execution>
-                        <id>configure-infinispan-server</id>
+                        <id>update-infinispan-config</id>
                         <phase>process-test-resources</phase>
                         <goals>
                             <goal>copy-resources</goal>
@@ -231,14 +231,15 @@
                             <overwrite>true</overwrite>
                             <resources>
                                 <resource>
-                                    <directory>${basedir}/src/test/resources/infinispan-server-config</directory>
+                                    <directory>${basedir}/src/test/resources/infinispan-server/config</directory>
                                 </resource>
                             </resources>
                         </configuration>
                     </execution>
-                    <!-- Create infinispan static module for task-model -->
+
+                    <!-- Update JBoss module files -->
                     <execution>
-                        <id>add task model module jboss</id>
+                        <id>update-jboss-module-taskmodel</id>
                         <phase>process-test-resources</phase>
                         <goals>
                             <goal>copy-resources</goal>
@@ -248,49 +249,13 @@
                             <overwrite>true</overwrite>
                             <resources>
                                 <resource>
-                                    <directory>${basedir}/src/test/resources/model-client-module</directory>
+                                    <directory>${basedir}/src/test/resources/jboss-server/module/taskmodel</directory>
                                 </resource>
                             </resources>
                         </configuration>
                     </execution>
-                    <!-- Create infinispan static module for task-model -->
                     <execution>
-                        <id>add task model module infinispan</id>
-                        <phase>process-test-resources</phase>
-                        <goals>
-                            <goal>copy-resources</goal>
-                        </goals>
-                        <configuration>
-                            <outputDirectory>${infinispan.home}/modules/it/redhat/demo/taskmodel/main</outputDirectory>
-                            <overwrite>true</overwrite>
-                            <resources>
-                                <resource>
-                                    <directory>${basedir}/src/test/resources/model-module</directory>
-                                </resource>
-                            </resources>
-                        </configuration>
-                    </execution>
-                    <!-- Update infinispan static module for task-model -->
-                    <execution>
-                        <id>update infinispan static module</id>
-                        <phase>pre-integration-test</phase>
-                        <goals>
-                            <goal>copy-resources</goal>
-                        </goals>
-                        <configuration>
-                            <outputDirectory>${infinispan.home}/modules/system/layers/base/org/infinispan/main</outputDirectory>
-                            <overwrite>true</overwrite>
-                            <resources>
-                                <resource>
-                                    <directory>${basedir}/src/test/resources/infinispan-module</directory>
-                                </resource>
-                            </resources>
-                        </configuration>
-                    </execution>
-
-                    <!-- Update infinispan static module for task-model -->
-                    <execution>
-                        <id>update infinispan common client static module</id>
+                        <id>update-jboss-module-infinispan-commons</id>
                         <phase>pre-integration-test</phase>
                         <goals>
                             <goal>copy-resources</goal>
@@ -300,11 +265,46 @@
                             <overwrite>true</overwrite>
                             <resources>
                                 <resource>
-                                    <directory>${basedir}/src/test/resources/infinispan-common-client-module</directory>
+                                    <directory>${basedir}/src/test/resources/jboss-server/module/infinispan-common</directory>
                                 </resource>
                             </resources>
                         </configuration>
                     </execution>
+
+                    <!-- Update Infinispan module files -->
+                    <execution>
+                        <id>update-infinispan-module-taskmodel</id>
+                        <phase>process-test-resources</phase>
+                        <goals>
+                            <goal>copy-resources</goal>
+                        </goals>
+                        <configuration>
+                            <outputDirectory>${infinispan.home}/modules/it/redhat/demo/taskmodel/main</outputDirectory>
+                            <overwrite>true</overwrite>
+                            <resources>
+                                <resource>
+                                    <directory>${basedir}/src/test/resources/infinispan-server/module/taskmodel</directory>
+                                </resource>
+                            </resources>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>update-infinispan-module-infinispan</id>
+                        <phase>pre-integration-test</phase>
+                        <goals>
+                            <goal>copy-resources</goal>
+                        </goals>
+                        <configuration>
+                            <outputDirectory>${infinispan.home}/modules/system/layers/base/org/infinispan/main</outputDirectory>
+                            <overwrite>true</overwrite>
+                            <resources>
+                                <resource>
+                                    <directory>${basedir}/src/test/resources/infinispan-server/module/infinispan</directory>
+                                </resource>
+                            </resources>
+                        </configuration>
+                    </execution>
+
                 </executions>
             </plugin>
 
