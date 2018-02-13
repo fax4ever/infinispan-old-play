@@ -106,7 +106,7 @@
                     <transaction mode="NON_XA" locking="PESSIMISTIC"/>
                 </distributed-cache>
                 <local-cache name="projects">
-                    <compatibility />
+                    <compatibility marshaller="org.infinispan.query.remote.CompatibilityProtoStreamMarshaller" />
                 </local-cache>
             </cache-container>
         </subsystem>
