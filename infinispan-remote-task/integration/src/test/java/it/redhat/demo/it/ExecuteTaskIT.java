@@ -1,6 +1,7 @@
 package it.redhat.demo.it;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 
 import java.io.File;
 import java.net.URL;
@@ -148,6 +149,26 @@ public class ExecuteTaskIT {
 
 		assertEquals( projectName, project.getName() );
 		assertEquals( new Integer(2), project.getCode() );
+
+	}
+
+	// At the time of writing compatibility mode seems not working
+	//@Test
+	//@RunAsClient
+	public void test_compatibility_mode() {
+
+		WebTarget compatibilityResource = client
+				.target( deploymentURL.toString() )
+				.path( "compatibility" );
+
+		Project pj = compatibilityResource.path( "PJ" )
+			.request().post( Entity.text( "" ), Project.class );
+
+		Project jp = compatibilityResource.path( "JP" )
+			.request().post( Entity.text( "" ), Project.class );
+
+		assertNotNull( pj );
+		assertNotNull( jp );
 
 	}
 
