@@ -88,8 +88,8 @@ public class ExecuteTaskIT {
 
 	}
 
-	@Test
-	@RunAsClient
+//	@Test
+//	@RunAsClient
 	public void test_usingCache() {
 
 		String projectName = "HibernateOGM";
@@ -120,8 +120,8 @@ public class ExecuteTaskIT {
 
 	}
 
-	@Test
-	@RunAsClient
+//	@Test
+//	@RunAsClient
 	public void test_usingTask() {
 
 		String projectName = "HibernateSearch";

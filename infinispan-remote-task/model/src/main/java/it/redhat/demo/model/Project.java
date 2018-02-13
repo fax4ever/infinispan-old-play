@@ -6,9 +6,11 @@
  */
 package it.redhat.demo.model;
 
+import java.io.IOException;
 import java.io.Serializable;
 import java.util.Objects;
 
+import org.infinispan.protostream.MessageMarshaller;
 import org.infinispan.protostream.annotations.ProtoField;
 import org.infinispan.protostream.annotations.ProtoMessage;
 
@@ -24,6 +26,15 @@ public class Project implements Serializable {
 	private String name;
 
 	private String description;
+
+	public Project() {
+	}
+
+	public Project(Integer code, String name, String description) {
+		this.code = code;
+		this.name = name;
+		this.description = description;
+	}
 
 	@ProtoField(number = 1, required = true)
 	public Integer getCode() {
@@ -74,6 +85,39 @@ public class Project implements Serializable {
 				", name='" + name + '\'' +
 				", description='" + description + '\'' +
 				'}';
+	}
+
+	public static final class Marshaller implements MessageMarshaller<Project> {
+
+		@Override
+		public Project readFrom(ProtoStreamReader reader) throws IOException {
+
+			Integer code = reader.readInt( "code" );
+			String name = reader.readString( "name" );
+			String description = reader.readString( "description" );
+
+			return new Project( code, name, description );
+		}
+
+		@Override
+		public void writeTo(ProtoStreamWriter writer, Project project) throws IOException {
+
+			writer.writeInt( "code", project.code );
+			writer.writeString( "name", project.name );
+			writer.writeString( "description", project.description );
+
+		}
+
+		@Override
+		public Class<? extends Project> getJavaClass() {
+			return Project.class;
+		}
+
+		@Override
+		public String getTypeName() {
+			return "it.redhat.demo.model.Project";
+		}
+
 	}
 
 }

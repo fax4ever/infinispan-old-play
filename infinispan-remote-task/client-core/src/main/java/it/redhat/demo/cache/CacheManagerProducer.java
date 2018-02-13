@@ -75,6 +75,8 @@ public class CacheManagerProducer {
 					.addClass( Project.class )
 				.build( serCtx );
 
+			serCtx.registerMarshaller( new Project.Marshaller() );
+
 			String cacheName = ProtobufMetadataManagerConstants.PROTOBUF_METADATA_CACHE_NAME;
 			RemoteCache<String, String> metadataCache = remoteCacheManager.getCache( cacheName );
 			metadataCache.put(PROTO_SCHEMA_NAME, generatedSchema);
