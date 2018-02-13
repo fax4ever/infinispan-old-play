@@ -53,7 +53,7 @@ public class CreateProjectByNameTask implements ServerTask<Project> {
 		project = cache.put( projectName, project );
 		LOG.info( "Executed task {}. Project {} created", getName(), projectName );
 
-		return project;
+		return cache.get( projectName );
 	}
 
 }

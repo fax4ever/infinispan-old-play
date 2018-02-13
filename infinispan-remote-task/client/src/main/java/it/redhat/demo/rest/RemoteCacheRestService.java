@@ -10,6 +10,7 @@ import javax.ejb.Stateless;
 import javax.inject.Inject;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
+import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
@@ -60,6 +61,22 @@ public class RemoteCacheRestService {
 
 		protoCache.put( projectName, project );
 		project = protoCache.get( projectName );
+
+		log.info( "Created new project {} with code 1 {}", projectName, project );
+
+		return project;
+
+	}
+
+	@PUT
+	@Path( "project/{projectName}" )
+	@Produces( "application/json" )
+	public Project incrementProjectCode( @PathParam( "projectName" ) String projectName) {
+
+		Project project = protoCache.get( projectName );
+
+		project.setCode( project.getCode() + 1 );
+		protoCache.put( projectName, project );
 
 		log.info( "Created new project {} with code 1 {}", projectName, project );
 

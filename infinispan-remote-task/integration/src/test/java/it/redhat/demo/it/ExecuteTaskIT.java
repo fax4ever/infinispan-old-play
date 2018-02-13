@@ -9,6 +9,8 @@ import javax.ws.rs.client.ClientBuilder;
 import javax.ws.rs.client.Entity;
 import javax.ws.rs.client.WebTarget;
 
+import org.junit.After;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
@@ -59,15 +61,27 @@ public class ExecuteTaskIT {
 	@OperateOnDeployment("jboss")
 	private URL deploymentURL;
 
+	private Client client;
+
+	@Before
+	public void initClient() {
+		client = ClientBuilder.newClient();
+	}
+
+	@After
+	public void cleanUpClient() {
+		client.close();
+	}
+
 	@Test
 	@RunAsClient
 	public void test_ciaoRemoteTask() {
 
-		String response = ClientBuilder.newClient()
-				.target( deploymentURL.toString() )
-				.path( "task" )
-				.path( "ciao" )
-				.request().get( String.class );
+		String response = client
+			.target( deploymentURL.toString() )
+			.path( "task" )
+			.path( "ciao" )
+			.request().get( String.class );
 
 		assertEquals( "ciao", response );
 
@@ -77,7 +91,6 @@ public class ExecuteTaskIT {
 	@RunAsClient
 	public void test_usingCache() {
 
-		Client client = ClientBuilder.newClient();
 		String projectName = "HibernateOGM";
 
 		WebTarget path = client
@@ -90,11 +103,19 @@ public class ExecuteTaskIT {
 			.post( Entity.text( "" ), Project.class );
 
 		assertEquals( projectName, project.getName() );
+		assertEquals( new Integer(1), project.getCode() );
+
+		project = path.request()
+			.put( Entity.text( "" ), Project.class );
+
+		assertEquals( projectName, project.getName() );
+		assertEquals( new Integer(2), project.getCode() );
 
 		project = path.request()
 			.get( Project.class );
 
 		assertEquals( projectName, project.getName() );
+		assertEquals( new Integer(2), project.getCode() );
 
 	}
 
@@ -102,7 +123,6 @@ public class ExecuteTaskIT {
 	@RunAsClient
 	public void test_usingTask() {
 
-		Client client = ClientBuilder.newClient();
 		String projectName = "HibernateSearch";
 
 		WebTarget path = client
@@ -111,14 +131,101 @@ public class ExecuteTaskIT {
 			.path( "project" )
 			.path( projectName );
 
-		path.request()
-			.post( Entity.text( "" ), Project.class );
-
 		Project project = path.request()
-			.get( Project.class );
+			.post( Entity.text( "" ), Project.class );
 
 		assertEquals( projectName, project.getName() );
 		assertEquals( new Integer(1), project.getCode() );
+
+		project = path.request()
+			.put( Entity.text( "" ), Project.class );
+
+		assertEquals( projectName, project.getName() );
+		assertEquals( new Integer(2), project.getCode() );
+
+		project = path.request()
+			.get( Project.class );
+
+		assertEquals( projectName, project.getName() );
+		assertEquals( new Integer(2), project.getCode() );
+
+	}
+
+	// At the time of writing compatibility mode seems not working
+	/*@Test
+	@RunAsClient*/
+	public void test_compatibility_mode_CTC() {
+
+		String projectName = "compatibityKeyCTC";
+
+		WebTarget cachePath = client
+			.target( deploymentURL.toString() )
+			.path( "cache" )
+			.path( "project" )
+			.path( projectName );
+
+		WebTarget taskPath = client
+			.target( deploymentURL.toString() )
+			.path( "task" )
+			.path( "project" )
+			.path( projectName );
+
+		Project project = cachePath.request()
+			.post( Entity.text( "" ), Project.class );
+
+		assertEquals( projectName, project.getName() );
+		assertEquals( new Integer(1), project.getCode() );
+
+		project = taskPath.request()
+			.put( Entity.text( "" ), Project.class );
+
+		assertEquals( projectName, project.getName() );
+		assertEquals( new Integer(2), project.getCode() );
+
+		project = cachePath.request()
+			.get( Project.class );
+
+		assertEquals( projectName, project.getName() );
+		assertEquals( new Integer(2), project.getCode() );
+
+	}
+
+	// At the time of writing compatibility mode seems not working
+	/*@Test
+	@RunAsClient*/
+	public void test_compatibility_mode_TCT() {
+
+		String projectName = "compatibityKeyTCT";
+
+		WebTarget cachePath = client
+				.target( deploymentURL.toString() )
+				.path( "cache" )
+				.path( "project" )
+				.path( projectName );
+
+		WebTarget taskPath = client
+				.target( deploymentURL.toString() )
+				.path( "task" )
+				.path( "project" )
+				.path( projectName );
+
+		Project project = taskPath.request()
+				.post( Entity.text( "" ), Project.class );
+
+		assertEquals( projectName, project.getName() );
+		assertEquals( new Integer(1), project.getCode() );
+
+		project = cachePath.request()
+				.put( Entity.text( "" ), Project.class );
+
+		assertEquals( projectName, project.getName() );
+		assertEquals( new Integer(2), project.getCode() );
+
+		project = taskPath.request()
+				.get( Project.class );
+
+		assertEquals( projectName, project.getName() );
+		assertEquals( new Integer(2), project.getCode() );
 
 	}
 
