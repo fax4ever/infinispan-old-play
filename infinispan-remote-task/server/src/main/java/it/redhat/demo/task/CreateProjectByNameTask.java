@@ -1,14 +1,6 @@
-/*
- * Hibernate OGM, Domain model persistence for NoSQL datastores
- *
- * License: GNU Lesser General Public License (LGPL), version 2.1 or later
- * See the lgpl.txt file in the root directory or <http://www.gnu.org/licenses/lgpl-2.1.html>.
- */
 package it.redhat.demo.task;
 
-import org.infinispan.AdvancedCache;
 import org.infinispan.Cache;
-import org.infinispan.commons.dataconversion.IdentityEncoder;
 import org.infinispan.tasks.ServerTask;
 import org.infinispan.tasks.TaskContext;
 

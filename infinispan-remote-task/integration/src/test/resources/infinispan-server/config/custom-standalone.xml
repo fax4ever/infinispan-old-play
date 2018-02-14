@@ -83,7 +83,7 @@
                 <level name="WARN"/>
             </logger>
             <logger category="org.infinispan">
-                <level name="DEBUG"/>
+                <level name="INFO"/>
             </logger>
             <root-logger>
                 <level name="INFO"/>
@@ -107,6 +107,13 @@
                 </distributed-cache>
                 <local-cache name="projects">
                     <compatibility enabled="true" marshaller="org.infinispan.query.remote.CompatibilityProtoStreamMarshaller"/>
+                    <locking acquire-timeout="30000" concurrency-level="1000" striping="false"/>
+                    <transaction mode="NON_XA" locking="PESSIMISTIC"/>
+                </local-cache>
+                <local-cache name="index">
+                    <indexing index="ALL">
+                        <property name="default.directory_provider">ram</property>
+                    </indexing>
                 </local-cache>
             </cache-container>
         </subsystem>

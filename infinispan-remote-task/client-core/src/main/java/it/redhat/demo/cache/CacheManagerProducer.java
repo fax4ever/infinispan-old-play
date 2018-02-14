@@ -25,7 +25,9 @@ public class CacheManagerProducer {
 
 	private static final String DEFAULT_HOTROD_BIND_ADDRESS = "127.0.0.1";
     private static final int DEFAULT_HOTROD_PORT = 11372;
-	private static final String PROTO_SCHEMA_NAME = "schema.proto";
+
+    // the name here is not important, it is mandatory is only that ends with .proto
+	private static final String PROTO_SCHEMA_NAME = "cicciolippo.proto";
 
 	@Inject
     private Logger log;
