@@ -1,14 +1,18 @@
 package it.redhat.demo.it;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 
 import java.io.File;
 import java.net.URL;
+import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 import javax.ws.rs.client.Client;
 import javax.ws.rs.client.ClientBuilder;
 import javax.ws.rs.client.Entity;
 import javax.ws.rs.client.WebTarget;
+import javax.ws.rs.core.GenericType;
 
 import org.junit.After;
 import org.junit.Before;
@@ -20,7 +24,6 @@ import org.jboss.arquillian.container.test.api.OperateOnDeployment;
 import org.jboss.arquillian.container.test.api.RunAsClient;
 import org.jboss.arquillian.container.test.api.TargetsContainer;
 import org.jboss.arquillian.junit.Arquillian;
-import org.jboss.arquillian.junit.InSequence;
 import org.jboss.arquillian.test.api.ArquillianResource;
 import org.jboss.shrinkwrap.api.ShrinkWrap;
 import org.jboss.shrinkwrap.api.spec.JavaArchive;
@@ -77,7 +80,6 @@ public class ExecuteTaskIT {
 
 	@Test
 	@RunAsClient
-	@InSequence( 1 )
 	public void test_usingCache() {
 
 		String projectName = "HibernateOGM";
@@ -110,7 +112,6 @@ public class ExecuteTaskIT {
 
 	@Test
 	@RunAsClient
-	@InSequence( 2 )
 	public void test_usingTask() {
 
 		String projectName = "HibernateSearch";
@@ -143,7 +144,6 @@ public class ExecuteTaskIT {
 
 	@Test
 	@RunAsClient
-	@InSequence( 3 )
 	public void test_compatibility_mode_CTC() {
 
 		String projectName = "compatibityKeyCTC";
@@ -182,7 +182,6 @@ public class ExecuteTaskIT {
 
 	@Test
 	@RunAsClient
-	@InSequence( 4 )
 	public void test_compatibility_mode_TCT() {
 
 		String projectName = "compatibityKeyTCT";
@@ -216,6 +215,70 @@ public class ExecuteTaskIT {
 
 		assertEquals( projectName, project.getName() );
 		assertEquals( new Integer(2), project.getCode() );
+
+	}
+
+	@Test
+	@RunAsClient
+	public void test_query_compatibility() {
+
+		WebTarget cachePath = client
+				.target( deploymentURL.toString() )
+				.path( "cache" )
+				.path( "project" );
+
+		WebTarget taskPath = client
+				.target( deploymentURL.toString() )
+				.path( "task" )
+				.path( "project" );
+
+		// create Jboss1 project using cache
+		Project jBoss1 = cachePath.path( "JBoss1" )
+			.request()
+			.post( Entity.text( "" ), Project.class );
+
+		assertEquals( "JBoss1", jBoss1.getName() );
+		assertEquals( new Integer(1), jBoss1.getCode() );
+
+		// create Jboss2 project using task
+		Project jBoss2 = taskPath.path( "JBoss2" )
+			.request()
+			.post( Entity.text( "" ), Project.class );
+
+		assertEquals( "JBoss2", jBoss2.getName() );
+		assertEquals( new Integer(1), jBoss2.getCode() );
+
+		// query the server
+		List<Project> projects = cachePath.path( "code" ).path( "1" )
+			.request()
+			.get( new GenericType<List<Project>>() {} );
+
+		assertEquals( 2, projects.size() );
+
+		// collect names
+		Set<String> collect = projects.stream()
+				.map( project -> project.getName() )
+				.collect( Collectors.toSet() );
+
+		assertTrue( collect.contains( "JBoss1" ));
+		assertTrue( collect.contains( "JBoss2" ));
+
+		// using task for update Jboss1 project
+		jBoss1 = taskPath.path( "JBoss1" )
+			.request()
+			.put( Entity.text( "" ), Project.class );
+
+		assertEquals( "JBoss1", jBoss1.getName() );
+		assertEquals( new Integer(2), jBoss1.getCode() );
+
+		// query for code 1
+		projects = cachePath.path( "code" ).path( "1" )
+				.request()
+				.get( new GenericType<List<Project>>() {} );
+
+		assertEquals( 1, projects.size() );
+		assertEquals( "JBoss2", projects.get( 0 ).getName() );
+		assertEquals( new Integer(1), projects.get( 0 ).getCode() );
 
 	}
 

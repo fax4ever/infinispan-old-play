@@ -1,5 +1,6 @@
 package it.redhat.demo.rest;
 
+import java.util.List;
 import javax.inject.Inject;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
@@ -10,6 +11,7 @@ import javax.ws.rs.Produces;
 
 import it.redhat.demo.cache.ProtoStream;
 import it.redhat.demo.model.Project;
+import it.redhat.demo.query.QueryService;
 import it.redhat.demo.service.ProjectService;
 
 /**
@@ -21,6 +23,9 @@ public class CacheProjectService {
 	@Inject
 	@ProtoStream
 	private ProjectService service;
+
+	@Inject
+	private QueryService query;
 
 	@GET
 	@Path( "project/{projectName}" )
@@ -46,6 +51,15 @@ public class CacheProjectService {
 	public Project incrementProjectCode( @PathParam( "projectName" ) String projectName) {
 
 		return service.update( projectName );
+
+	}
+
+	@GET
+	@Path( "project/code/{code}" )
+	@Produces( "application/json" )
+	public List<Project> findAllProcessByCode( @PathParam( "code" ) Integer code ) {
+
+		return query.findByCode( code );
 
 	}
 

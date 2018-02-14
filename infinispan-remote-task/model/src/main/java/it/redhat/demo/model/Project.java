@@ -5,6 +5,7 @@ import java.io.Serializable;
 import java.util.Objects;
 
 import org.infinispan.protostream.MessageMarshaller;
+import org.infinispan.protostream.annotations.ProtoDoc;
 import org.infinispan.protostream.annotations.ProtoField;
 import org.infinispan.protostream.annotations.ProtoMessage;
 
@@ -13,6 +14,7 @@ import org.infinispan.protostream.annotations.ProtoMessage;
  */
 
 @ProtoMessage(name = "Project")
+@ProtoDoc("@Indexed")
 public class Project implements Serializable {
 
 	private Integer code;
@@ -30,6 +32,7 @@ public class Project implements Serializable {
 		this.description = description;
 	}
 
+	@ProtoDoc("@IndexedField(index = true, store = false)")
 	@ProtoField(number = 1, required = true)
 	public Integer getCode() {
 		return code;
@@ -39,6 +42,7 @@ public class Project implements Serializable {
 		this.code = code;
 	}
 
+	@ProtoDoc("@IndexedField(index = true, store = false)")
 	@ProtoField(number = 2, required = true)
 	public String getName() {
 		return name;
@@ -48,6 +52,7 @@ public class Project implements Serializable {
 		this.name = name;
 	}
 
+	@ProtoDoc("@IndexedField")
 	@ProtoField(number = 3, required = true)
 	public String getDescription() {
 		return description;

@@ -72,6 +72,12 @@
             <scope>provided</scope>
         </dependency>
 
+        <dependency>
+            <groupId>org.infinispan</groupId>
+            <artifactId>infinispan-query-dsl</artifactId>
+            <scope>provided</scope>
+        </dependency>
+
         <!-- LOG -->
         <dependency>
             <groupId>org.slf4j</groupId>
