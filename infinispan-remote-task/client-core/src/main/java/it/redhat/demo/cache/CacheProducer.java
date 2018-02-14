@@ -1,5 +1,6 @@
 package it.redhat.demo.cache;
 
+import java.util.Collections;
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
 import javax.ejb.Singleton;
@@ -27,33 +28,44 @@ public class CacheProducer {
 	@Inject
 	private Logger log;
 
-	@Inject
-	@JBossMarshalling
-	private RemoteCacheManager cacheManager;
-
-	@PostConstruct
-	private void onStartup() {
-		log.info( "Staring Service..." );
-		cacheManager.start();
-	}
-
-	@PreDestroy
-	private void onShutdown() {
-		log.info( "Shutting Service..." );
-		cacheManager.stop();
-	}
+	private boolean updateServer = false;
 
 	@Inject
 	@JBossMarshalling
 	private RemoteCacheManager jbossCacheManager;
 
 	@Inject
+	@JBossMarshalling
+	private RemoteCacheManager tempJbossCacheManager;
+
+	@Inject
 	@ProtoStream
 	private RemoteCacheManager protoCacheManager;
+
+	@PostConstruct
+	private void onStartup() {
+
+		log.info( "Staring Service..." );
+
+		jbossCacheManager.start();
+		protoCacheManager.start();
+	}
+
+	@PreDestroy
+	private void onShutdown() {
+
+		log.info( "Shutting down Service..." );
+
+		jbossCacheManager.stop();
+		protoCacheManager.stop();
+	}
 
 	@Produces
 	@JBossMarshalling
 	public RemoteCache<String, Project> getJbossCache() {
+		if (!updateServer) {
+			registerClassMarshallerOnServer();
+		}
 
 		log.trace( "simple remote cache {} :: produce", CACHE_NAME );
 		return jbossCacheManager.<String, Project>getCache( CACHE_NAME ).withFlags( Flag.FORCE_RETURN_VALUE );
@@ -63,10 +75,32 @@ public class CacheProducer {
 	@Produces
 	@ProtoStream
 	public RemoteCache<String, Project> getProtoCache() {
+		if (!updateServer) {
+			registerClassMarshallerOnServer();
+		}
 
 		log.trace( "simple remote cache {} :: produce", CACHE_NAME );
 		return protoCacheManager.<String, Project>getCache( CACHE_NAME ).withFlags( Flag.FORCE_RETURN_VALUE );
 
+	}
+
+	private void registerClassMarshallerOnServer() {
+		tempJbossCacheManager.start();
+		RemoteCache<Object, Object> cache = null;
+
+		try {
+			cache = tempJbossCacheManager.getCache( CACHE_NAME );
+			cache.execute( "AddProtobufTask", Collections.emptyMap() );
+
+		} finally {
+			if (cache != null) {
+				cache.clear();
+			}
+
+			tempJbossCacheManager.stop();
+		}
+
+		updateServer = true;
 	}
 
 }

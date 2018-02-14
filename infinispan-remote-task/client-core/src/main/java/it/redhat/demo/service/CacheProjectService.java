@@ -5,8 +5,6 @@ import javax.inject.Inject;
 
 import org.infinispan.client.hotrod.RemoteCache;
 
-import org.slf4j.Logger;
-
 import it.redhat.demo.cache.ProtoStream;
 import it.redhat.demo.model.Project;
 
@@ -16,9 +14,6 @@ import it.redhat.demo.model.Project;
 @Stateless
 @ProtoStream
 public class CacheProjectService implements ProjectService {
-
-	@Inject
-	private Logger log;
 
 	@Inject
 	@ProtoStream

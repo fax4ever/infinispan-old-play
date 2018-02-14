@@ -78,34 +78,6 @@ public class ExecuteTaskIT {
 	@Test
 	@RunAsClient
 	@InSequence( 1 )
-	public void test_ciaoRemoteTask() {
-
-		String response = client
-			.target( deploymentURL.toString() )
-			.path( "task" )
-			.path( "ciao" )
-			.request().get( String.class );
-
-		assertEquals( "ciao", response );
-
-	}
-
-	@Test
-	@RunAsClient
-	@InSequence( 2 )
-	public void tryToRegisterClassMarshallerOnServer() {
-
-		client
-			.target( deploymentURL.toString() )
-			.path( "task" )
-			.path( "init" )
-			.request().post( Entity.text( "" ), String.class );
-
-	}
-
-	@Test
-	@RunAsClient
-	@InSequence( 3 )
 	public void test_usingCache() {
 
 		String projectName = "HibernateOGM";
@@ -138,7 +110,7 @@ public class ExecuteTaskIT {
 
 	@Test
 	@RunAsClient
-	@InSequence( 4 )
+	@InSequence( 2 )
 	public void test_usingTask() {
 
 		String projectName = "HibernateSearch";
@@ -171,7 +143,7 @@ public class ExecuteTaskIT {
 
 	@Test
 	@RunAsClient
-	@InSequence( 5 )
+	@InSequence( 3 )
 	public void test_compatibility_mode_CTC() {
 
 		String projectName = "compatibityKeyCTC";
@@ -210,7 +182,7 @@ public class ExecuteTaskIT {
 
 	@Test
 	@RunAsClient
-	@InSequence( 6 )
+	@InSequence( 4 )
 	public void test_compatibility_mode_TCT() {
 
 		String projectName = "compatibityKeyTCT";
