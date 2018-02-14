@@ -15,6 +15,7 @@ import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
+import javax.ws.rs.core.MediaType;
 
 import org.infinispan.client.hotrod.RemoteCache;
 
@@ -22,6 +23,7 @@ import org.slf4j.Logger;
 
 import it.redhat.demo.cache.JBossMarshalling;
 import it.redhat.demo.model.Project;
+import it.redhat.demo.service.ProjectService;
 
 /**
  * @author Fabio Massimo Ercoli
@@ -39,17 +41,15 @@ public class RemoteTaskRestService {
 	@JBossMarshalling
 	private RemoteCache<String, Project> cache;
 
+	@Inject
+	@JBossMarshalling
+	private ProjectService projectService;
+
 	@GET
 	@Path( "ciao" )
 	public Object ciaoRemoteTask() {
 
-		log.info( "execute task CiaoRemoteTask on cache {}", cache.getName() );
-
-		String result = cache.execute( "CiaoRemoteTask", Collections.emptyMap() );
-
-		log.info( "result: {}", result );
-
-		return result;
+		return cache.execute( "CiaoRemoteTask", Collections.emptyMap() );
 
 	}
 
@@ -63,46 +63,28 @@ public class RemoteTaskRestService {
 
 	@GET
 	@Path( "project/{projectName}" )
-	@Produces( "application/json" )
+	@Produces( MediaType.APPLICATION_JSON )
 	public Project getProjectByNameTask( @PathParam( "projectName" ) String projectName ) {
 
-		log.info( "execute task getProjectByNameTask on cache {} on project {}", cache.getName(), projectName );
-
-		Project result = cache.execute( "GetProjectByNameTask", Collections.singletonMap( "name", projectName ) );
-
-		log.info( "result: {}", result );
-
-		return result;
+		return projectService.take( projectName );
 
 	}
 
 	@POST
 	@Path( "project/{projectName}" )
-	@Produces( "application/json" )
+	@Produces( MediaType.APPLICATION_JSON )
 	public Project createProjectByNameTask( @PathParam( "projectName" ) String projectName ) {
 
-		log.info( "execute task CreateProjectByNameTask on cache {} on project {}", cache.getName(), projectName );
-
-		Project result = cache.execute( "CreateProjectByNameTask", Collections.singletonMap( "name", projectName ) );
-
-		log.info( "result: {}", result );
-
-		return result;
+		return projectService.create( projectName );
 
 	}
 
 	@PUT
 	@Path( "project/{projectName}" )
-	@Produces( "application/json" )
+	@Produces( MediaType.APPLICATION_JSON )
 	public Project incrementProjectCode( @PathParam( "projectName" ) String projectName ) {
 
-		log.info( "execute task IncrementProjectCodeTask on cache {} on project {}", cache.getName(), projectName );
-
-		Project result = cache.execute( "IncrementProjectCodeTask", Collections.singletonMap( "name", projectName ) );
-
-		log.info( "result: {}", result );
-
-		return result;
+		return projectService.update( projectName );
 
 	}
 
