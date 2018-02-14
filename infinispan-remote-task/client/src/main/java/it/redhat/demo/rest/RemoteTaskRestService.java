@@ -53,6 +53,14 @@ public class RemoteTaskRestService {
 
 	}
 
+	@POST
+	@Path( "init" )
+	public void init() {
+
+		cache.execute( "AddProtobufTask", Collections.emptyMap() );
+
+	}
+
 	@GET
 	@Path( "project/{projectName}" )
 	@Produces( "application/json" )

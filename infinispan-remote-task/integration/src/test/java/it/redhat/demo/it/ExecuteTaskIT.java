@@ -88,6 +88,18 @@ public class ExecuteTaskIT {
 
 	}
 
+	@Test
+	@RunAsClient
+	public void tryToRegisterClassMarshallerOnServer() {
+
+		client
+			.target( deploymentURL.toString() )
+			.path( "task" )
+			.path( "init" )
+			.request().post( Entity.text( "" ), String.class );
+
+	}
+
 //	@Test
 //	@RunAsClient
 	public void test_usingCache() {

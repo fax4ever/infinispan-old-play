@@ -2,3 +2,4 @@ it.redhat.demo.task.CiaoRemoteTask
 it.redhat.demo.task.GetProjectByNameTask
 it.redhat.demo.task.CreateProjectByNameTask
 it.redhat.demo.task.IncrementProjectCodeTask
+it.redhat.demo.task.AddProtobufTask
