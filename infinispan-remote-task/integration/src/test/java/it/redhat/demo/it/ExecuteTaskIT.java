@@ -20,6 +20,7 @@ import org.jboss.arquillian.container.test.api.OperateOnDeployment;
 import org.jboss.arquillian.container.test.api.RunAsClient;
 import org.jboss.arquillian.container.test.api.TargetsContainer;
 import org.jboss.arquillian.junit.Arquillian;
+import org.jboss.arquillian.junit.InSequence;
 import org.jboss.arquillian.test.api.ArquillianResource;
 import org.jboss.shrinkwrap.api.ShrinkWrap;
 import org.jboss.shrinkwrap.api.spec.JavaArchive;
@@ -76,6 +77,7 @@ public class ExecuteTaskIT {
 
 	@Test
 	@RunAsClient
+	@InSequence( 1 )
 	public void test_ciaoRemoteTask() {
 
 		String response = client
@@ -90,6 +92,7 @@ public class ExecuteTaskIT {
 
 	@Test
 	@RunAsClient
+	@InSequence( 2 )
 	public void tryToRegisterClassMarshallerOnServer() {
 
 		client
@@ -100,8 +103,9 @@ public class ExecuteTaskIT {
 
 	}
 
-//	@Test
-//	@RunAsClient
+	@Test
+	@RunAsClient
+	@InSequence( 3 )
 	public void test_usingCache() {
 
 		String projectName = "HibernateOGM";
@@ -132,8 +136,9 @@ public class ExecuteTaskIT {
 
 	}
 
-//	@Test
-//	@RunAsClient
+	@Test
+	@RunAsClient
+	@InSequence( 4 )
 	public void test_usingTask() {
 
 		String projectName = "HibernateSearch";
