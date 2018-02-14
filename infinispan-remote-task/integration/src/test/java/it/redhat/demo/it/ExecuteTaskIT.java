@@ -169,29 +169,9 @@ public class ExecuteTaskIT {
 
 	}
 
-	// At the time of writing compatibility mode seems not working
-	//@Test
-	//@RunAsClient
-	public void test_compatibility_mode() {
-
-		WebTarget compatibilityResource = client
-				.target( deploymentURL.toString() )
-				.path( "compatibility" );
-
-		Project pj = compatibilityResource.path( "PJ" )
-			.request().post( Entity.text( "" ), Project.class );
-
-		Project jp = compatibilityResource.path( "JP" )
-			.request().post( Entity.text( "" ), Project.class );
-
-		assertNotNull( pj );
-		assertNotNull( jp );
-
-	}
-
-	// At the time of writing compatibility mode seems not working
-	/*@Test
-	@RunAsClient*/
+	@Test
+	@RunAsClient
+	@InSequence( 5 )
 	public void test_compatibility_mode_CTC() {
 
 		String projectName = "compatibityKeyCTC";
@@ -228,9 +208,9 @@ public class ExecuteTaskIT {
 
 	}
 
-	// At the time of writing compatibility mode seems not working
-	/*@Test
-	@RunAsClient*/
+	@Test
+	@RunAsClient
+	@InSequence( 6 )
 	public void test_compatibility_mode_TCT() {
 
 		String projectName = "compatibityKeyTCT";
@@ -266,6 +246,5 @@ public class ExecuteTaskIT {
 		assertEquals( new Integer(2), project.getCode() );
 
 	}
-
 
 }
