@@ -295,22 +295,6 @@
                             </resources>
                         </configuration>
                     </execution>
-                    <execution>
-                        <id>update-infinispan-module-infinispan</id>
-                        <phase>pre-integration-test</phase>
-                        <goals>
-                            <goal>copy-resources</goal>
-                        </goals>
-                        <configuration>
-                            <outputDirectory>${infinispan.home}/modules/system/layers/base/org/infinispan/main</outputDirectory>
-                            <overwrite>true</overwrite>
-                            <resources>
-                                <resource>
-                                    <directory>${basedir}/src/test/resources/infinispan-server/module/infinispan</directory>
-                                </resource>
-                            </resources>
-                        </configuration>
-                    </execution>
 
                 </executions>
             </plugin>
