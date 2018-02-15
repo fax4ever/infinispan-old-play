@@ -89,7 +89,7 @@ public class CacheProducer {
 		RemoteCache<Object, Object> cache = null;
 
 		try {
-			cache = tempJbossCacheManager.getCache( CACHE_NAME );
+			cache = tempJbossCacheManager.getCache();
 			cache.execute( "AddProtobufTask", Collections.emptyMap() );
 
 		} finally {
