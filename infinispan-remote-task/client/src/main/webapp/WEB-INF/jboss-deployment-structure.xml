@@ -3,7 +3,7 @@
 <jboss-deployment-structure xmlns="urn:jboss:deployment-structure:1.2">
     <deployment>
         <dependencies>
-            <module name="org.infinispan.remote" slot="ispn-9.1" services="export"/>
+            <module name="org.infinispan.remote" slot="ispn-9.1" />
             <module name="it.redhat.demo.taskmodel"/>
         </dependencies>
         <exclusions>
