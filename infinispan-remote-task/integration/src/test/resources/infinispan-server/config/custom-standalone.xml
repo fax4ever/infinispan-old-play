@@ -106,17 +106,10 @@
                     <transaction mode="NON_XA" locking="PESSIMISTIC"/>
                 </distributed-cache>
                 <local-cache name="projects">
-                    <indexing index="ALL">
-                        <property name="default.directory_provider">ram</property>
-                    </indexing>
+                    <indexing index="LOCAL" auto-config="true" />
                     <compatibility enabled="true" marshaller="org.infinispan.query.remote.CompatibilityProtoStreamMarshaller"/>
                     <locking acquire-timeout="30000" concurrency-level="1000" striping="false"/>
                     <transaction mode="NON_XA" locking="PESSIMISTIC"/>
-                </local-cache>
-                <local-cache name="index">
-                    <indexing index="ALL">
-                        <property name="default.directory_provider">ram</property>
-                    </indexing>
                 </local-cache>
             </cache-container>
         </subsystem>
