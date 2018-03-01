@@ -32,7 +32,7 @@ public class Project implements Serializable {
 		this.description = description;
 	}
 
-	@ProtoDoc("@Field(store = Store.YES)")
+	@ProtoDoc("@IndexedField(index=true, store=false)")
 	@ProtoField(number = 1, required = true)
 	public Integer getCode() {
 		return code;
@@ -42,7 +42,7 @@ public class Project implements Serializable {
 		this.code = code;
 	}
 
-	@ProtoDoc("@Field(store = Store.YES, index = Index.YES)")
+	@ProtoDoc("@IndexedField(index=true, store=false)")
 	@ProtoField(number = 2, required = true)
 	public String getName() {
 		return name;
@@ -52,7 +52,7 @@ public class Project implements Serializable {
 		this.name = name;
 	}
 
-	@ProtoDoc("@Field(store = Store.NO, index = Index.NO)")
+	@ProtoDoc("@IndexedField(index=false, store=false)")
 	@ProtoField(number = 3, required = true)
 	public String getDescription() {
 		return description;
