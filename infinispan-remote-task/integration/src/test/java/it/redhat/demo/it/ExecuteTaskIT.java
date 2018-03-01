@@ -5,6 +5,7 @@ import static org.junit.Assert.assertTrue;
 
 import java.io.File;
 import java.net.URL;
+import java.util.Date;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -279,6 +280,72 @@ public class ExecuteTaskIT {
 		assertEquals( 1, projects.size() );
 		assertEquals( "JBoss2", projects.get( 0 ).getName() );
 		assertEquals( new Integer(1), projects.get( 0 ).getCode() );
+
+	}
+
+	@Test
+	@RunAsClient
+	public void massiveTest_usingCache_query_index() {
+
+		WebTarget cachePath = client
+			.target( deploymentURL.toString() )
+			.path( "cache" )
+			.path( "project" );
+
+		long beforeMassiveInsert = System.currentTimeMillis();
+
+		cachePath.path( "massive" )
+			.path( "hash" ).path( "fabio" )
+			.path( "times" ).path( "100000" )
+			.request()
+			.post( Entity.text( "" ) );
+
+		long afterMassiveInsert = System.currentTimeMillis();
+
+		System.out.println("Massive Index: " + (afterMassiveInsert - beforeMassiveInsert) + "ms");
+
+		List<Project> projects = cachePath.path( "name" ).path( "fabio739" )
+				.request()
+				.get( new GenericType<List<Project>>() {} );
+
+		long afterSearchWithIndex = System.currentTimeMillis();
+
+		assertEquals( 1, projects.size() );
+
+		System.out.println("Search with Index: " + (afterSearchWithIndex - afterMassiveInsert) + "ms");
+
+	}
+
+	@Test
+	@RunAsClient
+	public void massiveTest_usingCache_query_noindex() {
+
+		WebTarget cachePath = client
+				.target( deploymentURL.toString() )
+				.path( "cache" )
+				.path( "project" );
+
+		long beforeMassiveInsert = System.currentTimeMillis();
+
+		cachePath.path( "massive" )
+				.path( "hash" ).path( "fabio" )
+				.path( "times" ).path( "100000" )
+				.request()
+				.post( Entity.text( "" ) );
+
+		long afterMassiveInsert = System.currentTimeMillis();
+
+		System.out.println("Massive Index: " + (afterMassiveInsert - beforeMassiveInsert) + "ms");
+
+		List<Project> projects = cachePath.path( "description" ).path( "fabio739" )
+				.request()
+				.get( new GenericType<List<Project>>() {} );
+
+		long afterSearchWithoutIndex = System.currentTimeMillis();
+
+		assertEquals( 1, projects.size() );
+
+		System.out.println("Search without Index: " + (afterSearchWithoutIndex - afterMassiveInsert) + "ms");
 
 	}
 

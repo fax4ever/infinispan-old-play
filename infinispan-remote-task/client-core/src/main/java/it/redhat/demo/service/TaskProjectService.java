@@ -39,4 +39,12 @@ public class TaskProjectService implements ProjectService {
 		return cache.execute( "IncrementProjectCodeTask", Collections.singletonMap( "name", name ) );
 	}
 
+	@Override
+	public void massiveCreate(String hash, int times) {
+
+		// TODO: to implement
+		throw new UnsupportedOperationException();
+	}
+
+
 }

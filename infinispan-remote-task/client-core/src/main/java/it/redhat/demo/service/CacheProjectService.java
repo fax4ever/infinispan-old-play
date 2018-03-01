@@ -44,4 +44,22 @@ public class CacheProjectService implements ProjectService {
 		return protoCache.get( name );
 	}
 
+	@Override
+	public void massiveCreate(String hash, int times) {
+
+		for (int i=1; i<=times; i++) {
+
+			String name = hash + i;
+
+			Project project = new Project();
+			project.setCode( i );
+			project.setDescription( name );
+			project.setName( name );
+
+			protoCache.put( name, project );
+
+		}
+
+	}
+
 }

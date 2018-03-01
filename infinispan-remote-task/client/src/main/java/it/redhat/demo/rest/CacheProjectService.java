@@ -63,4 +63,30 @@ public class CacheProjectService {
 
 	}
 
+	@GET
+	@Path( "project/name/{name}" )
+	@Produces( "application/json" )
+	public List<Project> findByName( @PathParam( "name" ) String name ) {
+
+		return query.findByName( name );
+
+	}
+
+	@GET
+	@Path( "project/description/{description}" )
+	@Produces( "application/json" )
+	public List<Project> findByDescription( @PathParam( "description" ) String description ) {
+
+		return query.findByName( description );
+
+	}
+
+	@POST
+	@Path( "project/massive/hash/{hash}/times/{times}" )
+	public void massiveInsert( @PathParam( "hash" ) String hash, @PathParam( "times" ) Integer times ) {
+
+		service.massiveCreate( hash, times );
+
+	}
+
 }

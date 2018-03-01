@@ -83,6 +83,8 @@ public class CacheManagerProducer {
 			RemoteCache<String, String> metadataCache = remoteCacheManager.getCache( cacheName );
 			metadataCache.put(PROTO_SCHEMA_NAME, generatedSchema);
 
+			log.info( generatedSchema );
+
 			String errors = metadataCache.get(ProtobufMetadataManagerConstants.ERRORS_KEY_SUFFIX);
 			if (errors != null) {
 				throw new IllegalStateException("Some Protobuf schema files contain errors:\n" + errors);

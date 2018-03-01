@@ -13,4 +13,5 @@ public interface ProjectService {
 
 	Project update(String name);
 
+	void massiveCreate(String hash, int times);
 }

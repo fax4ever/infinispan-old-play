@@ -52,7 +52,7 @@ public class Project implements Serializable {
 		this.name = name;
 	}
 
-	@ProtoDoc("@IndexedField")
+	@ProtoDoc("@IndexedField(index = false, store = false)")
 	@ProtoField(number = 3, required = true)
 	public String getDescription() {
 		return description;

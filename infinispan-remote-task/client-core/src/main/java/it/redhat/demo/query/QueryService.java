@@ -35,4 +35,26 @@ public class QueryService {
 
 	}
 
+	public List<Project> findByName( String name ) {
+
+		QueryFactory qf = Search.getQueryFactory( protoCache );
+		Query query = qf.from( Project.class )
+			.having( "name" ).equal( name )
+			.build();
+
+		return query.list();
+
+	}
+
+	public List<Project> findByDescription( String desription ) {
+
+		QueryFactory qf = Search.getQueryFactory( protoCache );
+		Query query = qf.from( Project.class )
+				.having( "desription" ).equal( desription )
+				.build();
+
+		return query.list();
+
+	}
+
 }
