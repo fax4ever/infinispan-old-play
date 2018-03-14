@@ -6,7 +6,7 @@ import java.util.Objects;
 
 public class GenericEntity {
 
-	Map<String, Object> data = new HashMap<>();
+	private Map<String, Object> data = new HashMap<>();
 
 	public GenericEntity put(String key, Object value) {
 		data.put( key, value );

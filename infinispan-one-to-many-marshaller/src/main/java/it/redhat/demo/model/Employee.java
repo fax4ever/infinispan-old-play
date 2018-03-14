@@ -8,10 +8,10 @@ import org.infinispan.protostream.annotations.ProtoMessage;
 @ProtoMessage(name = "Employee")
 public class Employee {
 
-	Integer code;
-	String name;
-	String surname;
-	String company;
+	private Integer code;
+	private String name;
+	private String surname;
+	private String company;
 
 	public Employee() {
 	}

@@ -1,8 +1,10 @@
-package it.redhat.demo.model;
+package it.redhat.demo.cache.specific;
 
 import java.io.IOException;
 
 import org.infinispan.protostream.MessageMarshaller;
+
+import it.redhat.demo.model.Employee;
 
 public class EmployeeMarshaller implements MessageMarshaller<Employee> {
 
@@ -18,10 +20,10 @@ public class EmployeeMarshaller implements MessageMarshaller<Employee> {
 
 	@Override
 	public void writeTo(ProtoStreamWriter writer, Employee employee) throws IOException {
-		writer.writeInt( "code", employee.code );
-		writer.writeString( "name", employee.name );
-		writer.writeString( "surname", employee.surname );
-		writer.writeString( "company", employee.company );
+		writer.writeInt( "code", employee.getCode() );
+		writer.writeString( "name", employee.getName() );
+		writer.writeString( "surname", employee.getSurname() );
+		writer.writeString( "company", employee.getCompany() );
 	}
 
 	@Override

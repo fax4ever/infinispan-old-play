@@ -1,8 +1,10 @@
-package it.redhat.demo.model;
+package it.redhat.demo.cache.specific;
 
 import java.io.IOException;
 
 import org.infinispan.protostream.MessageMarshaller;
+
+import it.redhat.demo.model.Company;
 
 public class CompanyMarshaller implements MessageMarshaller<Company> {
 
@@ -17,9 +19,9 @@ public class CompanyMarshaller implements MessageMarshaller<Company> {
 
 	@Override
 	public void writeTo(ProtoStreamWriter writer, Company company) throws IOException {
-		writer.writeString( "name", company.name );
-		writer.writeString( "country", company.country );
-		writer.writeString( "vat", company.vat );
+		writer.writeString( "name", company.getName() );
+		writer.writeString( "country", company.getCountry() );
+		writer.writeString( "vat", company.getVat() );
 	}
 
 	@Override

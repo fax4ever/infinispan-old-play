@@ -1,10 +1,12 @@
-package it.redhat.demo.model;
+package it.redhat.demo.cache.generic;
 
 import java.io.IOException;
 import java.util.Collections;
 import java.util.Map;
 
 import org.infinispan.protostream.MessageMarshaller;
+
+import it.redhat.demo.model.GenericEntity;
 
 public class GenericEntityMarshaller implements MessageMarshaller<GenericEntity> {
 
@@ -27,11 +29,11 @@ public class GenericEntityMarshaller implements MessageMarshaller<GenericEntity>
 
 			if ( String.class.equals( fieldType )) {
 				String value = reader.readString( fieldName );
-				genericEntity.data.put( fieldName, value );
+				genericEntity.put( fieldName, value );
 			}
 			else if ( Integer.class.equals( fieldType )) {
 				Integer value = reader.readInt( fieldName );
-				genericEntity.data.put( fieldName, value );
+				genericEntity.put( fieldName, value );
 			}
 		}
 
@@ -46,10 +48,10 @@ public class GenericEntityMarshaller implements MessageMarshaller<GenericEntity>
 			Class fieldType = fieldMetadata.getValue();
 
 			if ( String.class.equals( fieldType )) {
-				writer.writeString( fieldName, (String) genericEntity.data.get( fieldName ) );
+				writer.writeString( fieldName, genericEntity.get( fieldName ) );
 			}
 			else if ( Integer.class.equals( fieldType )) {
-				writer.writeInt( fieldName, (Integer) genericEntity.data.get( fieldName ) );
+				writer.writeInt( fieldName, genericEntity.get( fieldName ) );
 			}
 		}
 

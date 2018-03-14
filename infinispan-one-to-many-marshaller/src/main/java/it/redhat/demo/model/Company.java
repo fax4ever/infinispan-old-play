@@ -8,9 +8,9 @@ import org.infinispan.protostream.annotations.ProtoMessage;
 @ProtoMessage(name = "Company")
 public class Company {
 
-	String name;
-	String country;
-	String vat;
+	private String name;
+	private String country;
+	private String vat;
 
 	public Company() {
 	}

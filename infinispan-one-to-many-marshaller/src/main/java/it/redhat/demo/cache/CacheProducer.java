@@ -12,6 +12,8 @@ import org.infinispan.client.hotrod.RemoteCacheManager;
 
 import org.slf4j.Logger;
 
+import it.redhat.demo.cache.generic.UseGenericEntityMarshaller;
+import it.redhat.demo.cache.specific.UseSpecificEntityMarshaller;
 import it.redhat.demo.model.Company;
 import it.redhat.demo.model.Employee;
 import it.redhat.demo.model.GenericEntity;
@@ -30,11 +32,11 @@ public class CacheProducer {
 	private Logger log;
 
 	@Inject
-	@ClassicMarshaller
+	@UseSpecificEntityMarshaller
 	private RemoteCacheManager cacheManager;
 
 	@Inject
-	@OneToManyMarshaller
+	@UseGenericEntityMarshaller
 	private RemoteCacheManager oneToManyCacheManager;
 
 	@PostConstruct
@@ -53,6 +55,7 @@ public class CacheProducer {
 	@PreDestroy
 	private void onShutdown() {
 		cacheManager.stop();
+		oneToManyCacheManager.stop();
 	}
 
 	@Produces
