@@ -1,5 +1,7 @@
 package it.redhat.demo.model;
 
+import java.util.Objects;
+
 import org.infinispan.protostream.annotations.ProtoField;
 import org.infinispan.protostream.annotations.ProtoMessage;
 
@@ -56,4 +58,36 @@ public class Employee {
 	public void setCompany(String company) {
 		this.company = company;
 	}
+
+	@Override
+	public boolean equals(Object o) {
+		if ( this == o ) {
+			return true;
+		}
+		if ( o == null || getClass() != o.getClass() ) {
+			return false;
+		}
+		Employee employee = (Employee) o;
+		return Objects.equals( code, employee.code ) &&
+				Objects.equals( name, employee.name ) &&
+				Objects.equals( surname, employee.surname ) &&
+				Objects.equals( company, employee.company );
+	}
+
+	@Override
+	public int hashCode() {
+
+		return Objects.hash( code, name, surname, company );
+	}
+
+	@Override
+	public String toString() {
+		return "Employee{" +
+				"code=" + code +
+				", name='" + name + '\'' +
+				", surname='" + surname + '\'' +
+				", company='" + company + '\'' +
+				'}';
+	}
+
 }

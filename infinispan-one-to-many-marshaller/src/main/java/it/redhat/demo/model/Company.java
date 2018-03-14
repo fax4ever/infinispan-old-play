@@ -1,5 +1,7 @@
 package it.redhat.demo.model;
 
+import java.util.Objects;
+
 import org.infinispan.protostream.annotations.ProtoField;
 import org.infinispan.protostream.annotations.ProtoMessage;
 
@@ -45,4 +47,34 @@ public class Company {
 	public void setVat(String vat) {
 		this.vat = vat;
 	}
+
+	@Override
+	public boolean equals(Object o) {
+		if ( this == o ) {
+			return true;
+		}
+		if ( o == null || getClass() != o.getClass() ) {
+			return false;
+		}
+		Company company = (Company) o;
+		return Objects.equals( name, company.name ) &&
+				Objects.equals( country, company.country ) &&
+				Objects.equals( vat, company.vat );
+	}
+
+	@Override
+	public int hashCode() {
+
+		return Objects.hash( name, country, vat );
+	}
+
+	@Override
+	public String toString() {
+		return "Company{" +
+				"name='" + name + '\'' +
+				", country='" + country + '\'' +
+				", vat='" + vat + '\'' +
+				'}';
+	}
+
 }
