@@ -28,6 +28,7 @@
     <modules>
         <module>infinispan-cluster-counter</module>
         <module>infinispan-remote-task</module>
+        <module>infinispan-remote-cache-creation</module>
     </modules>
 
 </project>

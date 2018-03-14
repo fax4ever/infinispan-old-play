@@ -32,3 +32,5 @@ work/
 test-output/
 transaction.log
 infinispan.log
+segments_*
+write.lock
