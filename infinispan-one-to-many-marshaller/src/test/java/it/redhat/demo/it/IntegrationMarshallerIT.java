@@ -1,9 +1,9 @@
 package it.redhat.demo.it;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 
 import java.io.File;
-
 import javax.inject.Inject;
 
 import org.junit.After;
@@ -23,7 +23,7 @@ import it.redhat.demo.model.Employee;
 import it.redhat.demo.model.GenericEntity;
 
 @RunWith(Arquillian.class)
-public class OneToManyMarshallerIT {
+public class IntegrationMarshallerIT {
 
 	@Deployment
 	public static WebArchive create() {
@@ -41,11 +41,29 @@ public class OneToManyMarshallerIT {
 	private Employee davide = new Employee( 733, "Davide", "D'Alto", redCorp.getName() );
 	private Employee marinelli = new Employee( 137, "Fabio", "Marinelli", greenCorp.getName() );
 
+	private GenericEntity redCorpG = new GenericEntity().put( "name", "Red Corp" ).put( "country", "US" ).put( "vat", "red123456789" );
+	private GenericEntity greenCorpG = new GenericEntity().put( "name", "Green Corp" ).put( "country", "US" ).put( "vat", "green123456789" );
+
+	private GenericEntity fabioG = new GenericEntity().put( "code", 731 ).put( "name", "Fabio Massimo" )
+			.put( "surname", "Ercoli" ).put( "company", "Red Corp" );
+	private GenericEntity sanneG = new GenericEntity().put( "code", 777 ).put( "name", "Sanne" )
+			.put( "surname", "Grinovero" ).put( "company", "Red Corp" );
+	private GenericEntity davideG = new GenericEntity().put( "code", 733 ).put( "name", "Davide" )
+			.put( "surname", "D'Alto" ).put( "company", "Red Corp" );
+	private GenericEntity marinelliG = new GenericEntity().put( "code", 137 ).put( "name", "Fabio" )
+			.put( "surname", "Marinelli" ).put( "company", "Green Corp" );
+
 	@Inject
 	private RemoteCache<Integer, Employee> employeeCache;
 
 	@Inject
 	private RemoteCache<String, Company> companyCache;
+
+	@Inject
+	private RemoteCache<Integer, GenericEntity> employeeCacheGeneric;
+
+	@Inject
+	private RemoteCache<String, GenericEntity> companyCacheGeneric;
 
 	@Before
 	public void fillData() {
@@ -66,16 +84,13 @@ public class OneToManyMarshallerIT {
 
 	@Test
 	public void test() {
-		assertEquals( 4, employeeCache.size() );
-		assertEquals( 2, companyCache.size() );
+		assertEquals( 4, employeeCacheGeneric.size() );
+		assertEquals( 2, companyCacheGeneric.size() );
 
-		assertEquals( fabio, employeeCache.get( fabio.getCode() ) );
-		assertEquals( sanne, employeeCache.get( sanne.getCode() ) );
-		assertEquals( davide, employeeCache.get( davide.getCode() ) );
-		assertEquals( marinelli, employeeCache.get( marinelli.getCode() ) );
-
-		assertEquals( redCorp, companyCache.get( redCorp.getName() ) );
-		assertEquals( greenCorp, companyCache.get( greenCorp.getName() ) );
+		assertEquals( fabioG, employeeCacheGeneric.get( fabio.getCode() ) );
+		assertEquals( sanneG, employeeCacheGeneric.get( sanne.getCode() ) );
+		assertEquals( davideG, employeeCacheGeneric.get( davide.getCode() ) );
+		assertEquals( marinelliG, employeeCacheGeneric.get( marinelli.getCode() ) );
 	}
 
 }

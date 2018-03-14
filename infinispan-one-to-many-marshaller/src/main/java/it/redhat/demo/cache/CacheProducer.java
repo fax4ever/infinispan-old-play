@@ -14,6 +14,7 @@ import org.slf4j.Logger;
 
 import it.redhat.demo.model.Company;
 import it.redhat.demo.model.Employee;
+import it.redhat.demo.model.GenericEntity;
 
 /**
  * @author Fabio Massimo Ercoli
@@ -24,13 +25,17 @@ public class CacheProducer {
 
 	public static final String EMPLOYEE_CACHE = "employee";
 	public static final String COMPANY_CACHE = "company";
+
 	@Inject
 	private Logger log;
 
-	private boolean updateServer = false;
+	@Inject
+	@ClassicMarshaller
+	private RemoteCacheManager cacheManager;
 
 	@Inject
-	private RemoteCacheManager cacheManager;
+	@OneToManyMarshaller
+	private RemoteCacheManager oneToManyCacheManager;
 
 	@PostConstruct
 	private void onStartup() {
@@ -38,6 +43,11 @@ public class CacheProducer {
 
 		cacheManager.administration().getOrCreateCache( EMPLOYEE_CACHE, (String) null );
 		cacheManager.administration().getOrCreateCache( COMPANY_CACHE, (String) null );
+
+		oneToManyCacheManager.start();
+
+		oneToManyCacheManager.administration().getOrCreateCache( EMPLOYEE_CACHE, (String) null );
+		oneToManyCacheManager.administration().getOrCreateCache( COMPANY_CACHE, (String) null );
 	}
 
 	@PreDestroy
@@ -51,8 +61,18 @@ public class CacheProducer {
 	}
 
 	@Produces
-	public RemoteCache<String, Company> getProtoCache() {
+	public RemoteCache<String, Company> getCompanyCache() {
 		return cacheManager.<String, Company>getCache( COMPANY_CACHE );
+	}
+
+	@Produces
+	public RemoteCache<Integer, GenericEntity> getEmployeeGenericCache() {
+		return oneToManyCacheManager.<Integer, GenericEntity>getCache( EMPLOYEE_CACHE);
+	}
+
+	@Produces
+	public RemoteCache<String, GenericEntity> getCompanyGenericCache() {
+		return oneToManyCacheManager.<String, GenericEntity>getCache( COMPANY_CACHE );
 	}
 
 }

@@ -1,5 +1,7 @@
 package it.redhat.demo.cache;
 
+import java.util.HashMap;
+import java.util.Map;
 import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.inject.Produces;
 import javax.inject.Inject;
@@ -19,12 +21,13 @@ import it.redhat.demo.model.Company;
 import it.redhat.demo.model.CompanyMarshaller;
 import it.redhat.demo.model.Employee;
 import it.redhat.demo.model.EmployeeMarshaller;
+import it.redhat.demo.model.GenericEntityMarshaller;
 
 /**
  * @author Fabio Massimo Ercoli
  */
 @ApplicationScoped
-public class CacheManagerProducer {
+public class OneToManyCacheManagerProducer {
 
 	private static final String DEFAULT_HOTROD_BIND_ADDRESS = "127.0.0.1";
     private static final int DEFAULT_HOTROD_PORT = 11372;
@@ -36,7 +39,7 @@ public class CacheManagerProducer {
     private Logger log;
 
     @Produces
-	@ClassicMarshaller
+	@OneToManyMarshaller
     public RemoteCacheManager getProtoCacheManager() {
 
 		log.trace("remote cache manager :: produce");
@@ -67,8 +70,9 @@ public class CacheManagerProducer {
 				.build( serCtx );
 
 			log.info( "/n--- PROTO SCHEMA ---/n" + generatedSchema );
-			serCtx.registerMarshaller( new EmployeeMarshaller() );
-			serCtx.registerMarshaller( new CompanyMarshaller() );
+
+			serCtx.registerMarshaller( new GenericEntityMarshaller( Employee.class.getName(), getEmployeeMetadata() ) );
+			serCtx.registerMarshaller( new GenericEntityMarshaller( Company.class.getName(), getCompanyMetadata() ) );
 
 			String cacheName = ProtobufMetadataManagerConstants.PROTOBUF_METADATA_CACHE_NAME;
 			RemoteCache<String, String> metadataCache = remoteCacheManager.getCache( cacheName );
@@ -82,6 +86,27 @@ public class CacheManagerProducer {
 		} catch (Exception e) {
 			throw new IllegalStateException("An error occurred initializing ProtoStream protobuf marshaller:", e);
 		}
+	}
+
+	private Map<String,Class> getCompanyMetadata() {
+		HashMap<String, Class> metadata = new HashMap<>();
+
+		metadata.put( "name", String.class );
+		metadata.put( "country", String.class );
+		metadata.put( "vat", String.class );
+
+		return metadata;
+	}
+
+	private Map<String,Class> getEmployeeMetadata() {
+		HashMap<String, Class> metadata = new HashMap<>();
+
+		metadata.put( "code", Integer.class );
+		metadata.put( "name", String.class );
+		metadata.put( "surname", String.class );
+		metadata.put( "company", String.class );
+
+		return metadata;
 	}
 
 
