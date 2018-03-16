@@ -13,6 +13,7 @@ import org.infinispan.client.hotrod.RemoteCacheManager;
 import org.slf4j.Logger;
 
 import it.redhat.demo.cache.generic.UseGenericEntityMarshaller;
+import it.redhat.demo.cache.listener.EmployeeCreationListener;
 import it.redhat.demo.cache.specific.UseSpecificEntityMarshaller;
 import it.redhat.demo.model.Company;
 import it.redhat.demo.model.Employee;
@@ -39,12 +40,18 @@ public class CacheProducer {
 	@UseGenericEntityMarshaller
 	private RemoteCacheManager oneToManyCacheManager;
 
+	@Inject
+	private EmployeeCreationListener listener;
+
 	@PostConstruct
 	private void onStartup() {
 		cacheManager.start();
 
-		cacheManager.administration().getOrCreateCache( EMPLOYEE_CACHE, (String) null );
-		cacheManager.administration().getOrCreateCache( COMPANY_CACHE, (String) null );
+		RemoteCache<Object, Object> employeeCache = cacheManager.administration().getOrCreateCache( EMPLOYEE_CACHE, (String) null );
+		employeeCache.addClientListener( listener );
+
+		RemoteCache<Object, Object> companyCache = cacheManager.administration().getOrCreateCache( COMPANY_CACHE, (String) null );
+		companyCache.addClientListener( listener );
 
 		oneToManyCacheManager.start();
 
