@@ -46,12 +46,12 @@ public class QueryService {
 
 	}
 
-	public List<Project> findByDescription( String desription ) {
+	public List<Project> findByDescription( String description ) {
 
 		QueryFactory qf = Search.getQueryFactory( protoCache );
-		Query query = qf.from( Project.class )
-				.having( "desription" ).equal( desription )
-				.build();
+
+		Query query = qf.create( "select p from it.redhat.demo.model.Project where p.description = :description" );
+		query.setParameter( "description", description );
 
 		return query.list();
 
