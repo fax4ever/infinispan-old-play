@@ -28,7 +28,7 @@
         <version.infinispan>9.1.5.Final</version.infinispan>
 
         <!-- SLF4J -->
-        <version.org.slf4j>1.7.2.redhat-3</version.org.slf4j>
+        <version.org.slf4j>1.7.2</version.org.slf4j>
     </properties>
 
     <dependencyManagement>

@@ -77,7 +77,7 @@ public class CacheProjectService {
 	@Produces( "application/json" )
 	public List<Project> findByDescription( @PathParam( "description" ) String description ) {
 
-		return query.findByName( description );
+		return query.findByDescription( description );
 
 	}
 

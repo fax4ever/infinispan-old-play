@@ -50,7 +50,7 @@ public class QueryService {
 
 		QueryFactory qf = Search.getQueryFactory( protoCache );
 
-		Query query = qf.create( "select p from it.redhat.demo.model.Project where p.description = :description" );
+		Query query = qf.create( "from it.redhat.demo.model.Project where description = :description" );
 		query.setParameter( "description", description );
 
 		return query.list();

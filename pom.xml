@@ -30,6 +30,7 @@
         <module>infinispan-remote-task</module>
         <module>infinispan-remote-cache-creation</module>
         <module>infinispan-one-to-many-marshaller</module>
+        <module>infinispan-query-play</module>
     </modules>
 
 </project>
