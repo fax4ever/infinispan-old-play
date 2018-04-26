@@ -34,6 +34,6 @@ public class MovieMarshaller implements MessageMarshaller<Movie> {
 	}
 
 	public String getTypeName() {
-		return "ProtoModel." + Movie.class.getSimpleName();
+		return "ProtoModel.Movie";
 	}
 }

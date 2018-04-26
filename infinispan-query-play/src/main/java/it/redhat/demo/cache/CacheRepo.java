@@ -12,13 +12,13 @@ import it.redhat.demo.model.SimpleEntity;
 public class CacheRepo {
 
 	private static final String CONFIG = "<infinispan><cache-container>" +
-		"<distributed-cache name=\"%s\">" +
-		"<expiration interval=\"10000\" lifespan=\"10\" max-idle=\"10\"/>" +
-		"</distributed-cache>" +
-		"</cache-container></infinispan>";
+			"<distributed-cache name=\"%s\">" +
+			"<expiration interval=\"10000\" lifespan=\"10\" max-idle=\"10\"/>" +
+			"</distributed-cache>" +
+			"</cache-container></infinispan>";
 
-	private static final String MOVIE_CACHE_NAME = "Movie";
-	private static final String SIMPLE_ENTITY_CACHE_NAME = "SimpleEntity";
+	public static final String MOVIE_CACHE_NAME = "Movie";
+	public static final String SIMPLE_ENTITY_CACHE_NAME = "SimpleEntity";
 
 	private RemoteCacheManager manager;
 	private RemoteCache<String, Movie> movieCache;
@@ -29,8 +29,10 @@ public class CacheRepo {
 	}
 
 	public void init() {
-		this.movieCache = manager.administration().getOrCreateCache( MOVIE_CACHE_NAME, new XMLStringConfiguration( String.format( CONFIG, MOVIE_CACHE_NAME ) ) );
-		this.simpleEntityCache = this.manager.administration().getOrCreateCache( SIMPLE_ENTITY_CACHE_NAME, new XMLStringConfiguration( String.format( CONFIG, SIMPLE_ENTITY_CACHE_NAME ) ) );
+		this.movieCache = manager.administration().getOrCreateCache(
+				MOVIE_CACHE_NAME, new XMLStringConfiguration( String.format( CONFIG, MOVIE_CACHE_NAME ) ) );
+		this.simpleEntityCache = this.manager.administration().getOrCreateCache(
+				SIMPLE_ENTITY_CACHE_NAME, new XMLStringConfiguration( String.format( CONFIG, SIMPLE_ENTITY_CACHE_NAME ) ) );
 	}
 
 	public void clear() {
@@ -49,11 +51,7 @@ public class CacheRepo {
 		}
 	}
 
-	public RemoteCache<String, Movie> getMovieCache() {
-		return movieCache;
-	}
-
-	public RemoteCache<String, SimpleEntity> getSimpleEntityCache() {
-		return simpleEntityCache;
+	public RemoteCacheManager getManager() {
+		return manager;
 	}
 }

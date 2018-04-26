@@ -25,6 +25,6 @@ public class SimpleEntityMarshaller implements MessageMarshaller<SimpleEntity> {
 	}
 
 	public String getTypeName() {
-		return "ProtoModel." + SimpleEntity.class.getSimpleName();
+		return "ProtoModel.SimpleEntity";
 	}
 }
