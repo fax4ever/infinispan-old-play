@@ -165,7 +165,7 @@ public class QueryIT {
 		params.add( ByteArrayHelper.toArray( (byte) 4 ) );
 		params.add( ByteArrayHelper.toArray( (byte) 1 ) );
 
-		Query query = qf.create( "from HibernateOGMGenerated.Movie where suitableForKids = :suitable" )
+		Query query = qf.create( "from ProtoModel.Movie where suitableForKids = :suitable" )
 				.setParameter( "suitable", "yes" );
 
 		List<Object> output = query.list();
