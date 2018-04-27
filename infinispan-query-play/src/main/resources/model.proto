@@ -1,6 +1,6 @@
 package ProtoModel;
 
-message SimpleEntity {
+message Simple {
    required int32 value1 = 1;
    required string value2 = 2;
    optional int64 value3 = 3;

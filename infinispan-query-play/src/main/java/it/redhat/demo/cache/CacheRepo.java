@@ -1,57 +1,58 @@
 package it.redhat.demo.cache;
 
-import java.io.IOException;
-
 import org.infinispan.client.hotrod.RemoteCache;
 import org.infinispan.client.hotrod.RemoteCacheManager;
 import org.infinispan.commons.configuration.XMLStringConfiguration;
 
 import it.redhat.demo.model.Movie;
-import it.redhat.demo.model.SimpleEntity;
+import it.redhat.demo.model.Simple;
 
 public class CacheRepo {
 
-	private static final String CONFIG = "<infinispan><cache-container>" +
-			"<distributed-cache name=\"%s\">" +
-			"<expiration interval=\"10000\" lifespan=\"10\" max-idle=\"10\"/>" +
-			"</distributed-cache>" +
+	public static final String CONFIG =
+			"<infinispan><cache-container>" +
+			"	<distributed-cache-configuration name=\"%s\">" +
+			"     <locking striping=\"false\" acquire-timeout=\"10000\" concurrency-level=\"50\" isolation=\"READ_COMMITTED\"/>" +
+			"     <transaction mode=\"NON_DURABLE_XA\" />" +
+			"     <expiration max-idle=\"-1\" />" +
+			"     <indexing index=\"NONE\" />" +
+			"     <state-transfer timeout=\"480000\" await-initial-transfer=\"true\" />" +
+			"   </distributed-cache-configuration>" +
 			"</cache-container></infinispan>";
 
 	public static final String MOVIE_CACHE_NAME = "Movie";
-	public static final String SIMPLE_ENTITY_CACHE_NAME = "SimpleEntity";
+	public static final String SIMPLE_ENTITY_CACHE_NAME = "Simple";
 
-	private RemoteCacheManager manager;
+	private final RemoteCacheManager manager;
 	private RemoteCache<String, Movie> movieCache;
-	private RemoteCache<String, SimpleEntity> simpleEntityCache;
+	private RemoteCache<String, Simple> simpleCache;
 
-	public CacheRepo() {
-		this.manager = new CacheManagerFactory().create();
+	public CacheRepo(RemoteCacheManager manager) {
+		this.manager = manager;
 	}
 
-	public void init() {
+	public void create() {
 		this.movieCache = manager.administration().getOrCreateCache(
 				MOVIE_CACHE_NAME, new XMLStringConfiguration( String.format( CONFIG, MOVIE_CACHE_NAME ) ) );
-		this.simpleEntityCache = this.manager.administration().getOrCreateCache(
+		this.simpleCache = this.manager.administration().getOrCreateCache(
 				SIMPLE_ENTITY_CACHE_NAME, new XMLStringConfiguration( String.format( CONFIG, SIMPLE_ENTITY_CACHE_NAME ) ) );
 	}
 
-	public void clear() {
+	public void dispose() {
 		movieCache.clear();
-		simpleEntityCache.clear();
-	}
-
-	public void close() {
+		simpleCache.clear();
 		movieCache.stop();
-		simpleEntityCache.stop();
-		try {
-			manager.close();
-		}
-		catch (IOException e) {
-			throw new RuntimeException( e );
-		}
+		simpleCache.stop();
+
+		manager.administration().removeCache( MOVIE_CACHE_NAME );
+		manager.administration().removeCache( SIMPLE_ENTITY_CACHE_NAME );
 	}
 
-	public RemoteCacheManager getManager() {
-		return manager;
+	public RemoteCache<String, Movie> getMovieCache() {
+		return movieCache;
+	}
+
+	public RemoteCache<String, Simple> getSimpleCache() {
+		return simpleCache;
 	}
 }

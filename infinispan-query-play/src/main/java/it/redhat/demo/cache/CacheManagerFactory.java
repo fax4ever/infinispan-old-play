@@ -16,7 +16,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import it.redhat.demo.model.MovieMarshaller;
-import it.redhat.demo.model.SimpleEntityMarshaller;
+import it.redhat.demo.model.SimpleMarshaller;
 
 public class CacheManagerFactory {
 
@@ -45,7 +45,7 @@ public class CacheManagerFactory {
 
 		SerializationContext serCtx = marshaller.getSerializationContext();
 		registerProtoFilesOnClient( serCtx );
-		serCtx.registerMarshaller( new SimpleEntityMarshaller() );
+		serCtx.registerMarshaller( new SimpleMarshaller() );
 		serCtx.registerMarshaller( new MovieMarshaller() );
 
 		String cacheName = ProtobufMetadataManagerConstants.PROTOBUF_METADATA_CACHE_NAME;
