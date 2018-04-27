@@ -2,6 +2,8 @@ package it.redhat.demo.test;
 
 import static org.junit.Assert.assertEquals;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import org.junit.After;
@@ -13,6 +15,7 @@ import org.junit.runners.JUnit4;
 import org.infinispan.client.hotrod.RemoteCache;
 import org.infinispan.client.hotrod.RemoteCacheManager;
 import org.infinispan.client.hotrod.Search;
+import org.infinispan.client.hotrod.exceptions.HotRodClientException;
 import org.infinispan.query.dsl.Query;
 import org.infinispan.query.dsl.QueryFactory;
 
@@ -21,6 +24,7 @@ import org.slf4j.LoggerFactory;
 
 import it.redhat.demo.cache.CacheManagerFactory;
 import it.redhat.demo.cache.CacheRepo;
+import it.redhat.demo.helper.ByteArrayHelper;
 import it.redhat.demo.model.Movie;
 import it.redhat.demo.model.Simple;
 
@@ -43,7 +47,7 @@ public class QueryIT {
 
 		movieCache = cacheRepo.getMovieCache();
 		movieCache.put( "A", new Movie( "A", 7, 777l, "yes", "T2", (byte) 1 ) );
-		movieCache.put( "B", new Movie( "B", 8, 777l, "yes", "T1", (byte) 1 ) );
+		movieCache.put( "B", new Movie( "B", 8, 777l, "yes", "T1", (byte) 2 ) );
 		movieCache.put( "C", new Movie( "C", 7, 777l, "no", "T1", (byte) 4 ) );
 		movieCache.put( "D", new Movie( "D", 8, 717l, "yes", "T2", (byte) 1 ) );
 		movieCache.put( "E", new Movie( "E", 7, 717l, "no", "T1", (byte) 4 ) );
@@ -87,5 +91,88 @@ public class QueryIT {
 		LOG.info( "Query {}: output {}", query, output );
 		assertEquals( 5, output.size() );
 	}
+
+	@Test
+	public void findMovieBygenre() {
+		QueryFactory qf = Search.getQueryFactory( movieCache );
+		Query query = qf.create( "from ProtoModel.Movie where genre = 7" );
+		List<Object> output = query.list();
+
+		LOG.info( "Query {}: output {}", query, output );
+		assertEquals( 3, output.size() );
+	}
+
+	@Test(expected = HotRodClientException.class)
+	public void findMovieByviewerRating() {
+		QueryFactory qf = Search.getQueryFactory( movieCache );
+		Query query = qf.create( "from ProtoModel.Movie where viewerRating = 4" );
+		List<Object> output = query.list();
+
+		LOG.info( "Query {}: output {}", query, output );
+		assertEquals( 2, output.size() );
+	}
+
+	@Test(expected = HotRodClientException.class)
+	public void findMovieByviewerRating_withParams_byteArray() {
+		QueryFactory qf = Search.getQueryFactory( movieCache );
+
+		Query query = qf.create( "from ProtoModel.Movie where viewerRating = :viewerRating" )
+				.setParameter( "viewerRating", (byte) 4 );
+
+		List<Object> output = query.list();
+
+		LOG.info( "Query {}: output {}", query, output );
+		assertEquals( 2, output.size() );
+	}
+
+	@Test(expected = HotRodClientException.class)
+	public void findMovieByviewerRating_withParams_byteArrays() {
+		QueryFactory qf = Search.getQueryFactory( movieCache );
+
+		byte[] bytes = ByteArrayHelper.toArray( (byte) 4 );
+
+		Query query = qf.create( "from ProtoModel.Movie where viewerRating = :viewerRating" )
+			.setParameter( "viewerRating", bytes );
+
+		List<Object> output = query.list();
+
+		LOG.info( "Query {}: output {}", query, output );
+		assertEquals( 2, output.size() );
+	}
+
+	@Test(expected = HotRodClientException.class)
+	public void findMovieByviewerRating_IN_listOfbyteArrays() {
+		QueryFactory qf = Search.getQueryFactory( movieCache );
+
+		ArrayList<Object> params = new ArrayList<>();
+		params.add( ByteArrayHelper.toArray( (byte) 4 ) );
+		params.add( ByteArrayHelper.toArray( (byte) 1 ) );
+
+		Query query = qf.create( "from ProtoModel.Movie where viewerRating in (:viewerRating)" )
+				.setParameter( "viewerRating", params );
+
+		List<Object> output = query.list();
+
+		LOG.info( "Query {}: output {}", query, output );
+		assertEquals( 2, output.size() );
+	}
+
+	@Test
+	public void findMovieBysuitableForKids_withParameters() {
+		QueryFactory qf = Search.getQueryFactory( movieCache );
+
+		ArrayList<Object> params = new ArrayList<>();
+		params.add( ByteArrayHelper.toArray( (byte) 4 ) );
+		params.add( ByteArrayHelper.toArray( (byte) 1 ) );
+
+		Query query = qf.create( "from HibernateOGMGenerated.Movie where suitableForKids = :suitable" )
+				.setParameter( "suitable", "yes" );
+
+		List<Object> output = query.list();
+
+		LOG.info( "Query {}: output {}", query, output );
+		assertEquals( 3, output.size() );
+	}
+
 
 }

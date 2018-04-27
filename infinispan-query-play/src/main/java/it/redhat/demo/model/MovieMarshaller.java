@@ -4,6 +4,8 @@ import java.io.IOException;
 
 import org.infinispan.protostream.MessageMarshaller;
 
+import it.redhat.demo.helper.ByteArrayHelper;
+
 public class MovieMarshaller implements MessageMarshaller<Movie> {
 
 	public Movie readFrom(ProtoStreamReader reader) throws IOException {
@@ -14,19 +16,16 @@ public class MovieMarshaller implements MessageMarshaller<Movie> {
 		String title = reader.readString( "title" );
 		byte[] viewerRatings = reader.readBytes( "viewerRating" );
 
-		return new Movie( id, genre, releaseDate, suitableForKids, title, viewerRatings[0] );
+		return new Movie( id, genre, releaseDate, suitableForKids, title, ByteArrayHelper.toSingle( viewerRatings ) );
 	}
 
 	public void writeTo(ProtoStreamWriter writer, Movie movie) throws IOException {
-		byte[] viewerRatingsContainer = new byte[1];
-		viewerRatingsContainer[0] = movie.viewerRating;
-
 		writer.writeString( "id", movie.id );
 		writer.writeInt( "genre", movie.genre );
 		writer.writeLong( "releaseDate", movie.releaseDate );
 		writer.writeString( "suitableForKids", movie.suitableForKids );
 		writer.writeString( "title", movie.title );
-		writer.writeBytes( "viewerRating", viewerRatingsContainer );
+		writer.writeBytes( "viewerRating", ByteArrayHelper.toArray( movie.viewerRating ) );
 	}
 
 	public Class<? extends Movie> getJavaClass() {
