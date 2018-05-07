@@ -3,7 +3,6 @@ package it.redhat.demo.test;
 import static org.junit.Assert.assertEquals;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import org.junit.After;
@@ -51,6 +50,8 @@ public class QueryIT {
 		movieCache.put( "C", new Movie( "C", 7, 777l, "no", "T1", (byte) 4 ) );
 		movieCache.put( "D", new Movie( "D", 8, 717l, "yes", "T2", (byte) 1 ) );
 		movieCache.put( "E", new Movie( "E", 7, 717l, "no", "T1", (byte) 4 ) );
+		movieCache.put( "F", null );
+		movieCache.put( "G", null );
 
 		simpleCache = cacheRepo.getSimpleCache();
 		simpleCache.put( "A", new Simple( 1, "A", 10l ) );
@@ -58,6 +59,11 @@ public class QueryIT {
 		simpleCache.put( "C", new Simple( 2, "B", 10l ) );
 		simpleCache.put( "D", new Simple( 2, "A", 1l ) );
 		simpleCache.put( "E", new Simple( 1, "A", 10l ) );
+		simpleCache.put( "F", null );
+		simpleCache.put( "G", null );
+
+		LOG.info( "movieCache size: {}", movieCache.size() );
+		LOG.info( "movieCache size: {}", simpleCache.size() );
 	}
 
 	@After
@@ -132,7 +138,7 @@ public class QueryIT {
 		byte[] bytes = ByteArrayHelper.toArray( (byte) 4 );
 
 		Query query = qf.create( "from ProtoModel.Movie where viewerRating = :viewerRating" )
-			.setParameter( "viewerRating", bytes );
+				.setParameter( "viewerRating", bytes );
 
 		List<Object> output = query.list();
 
@@ -173,6 +179,5 @@ public class QueryIT {
 		LOG.info( "Query {}: output {}", query, output );
 		assertEquals( 3, output.size() );
 	}
-
 
 }
