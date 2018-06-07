@@ -2,10 +2,12 @@ package it.redhat.demo.cache;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
+import javax.annotation.Resource;
 import javax.ejb.Singleton;
 import javax.ejb.Startup;
 import javax.enterprise.inject.Produces;
 import javax.inject.Inject;
+import javax.transaction.TransactionManager;
 
 import org.infinispan.client.hotrod.RemoteCache;
 import org.infinispan.client.hotrod.RemoteCacheManager;
@@ -19,8 +21,6 @@ import it.redhat.demo.model.Puzzle;
 @Startup
 public class CacheProducer {
 
-	public static final String CACHE_NAME = "puzzle";
-
 	private static final String OGM_BASIC_CONFIG =
 			"<infinispan><cache-container>" +
 					"	<distributed-cache-configuration name=\"%s\">" +
@@ -31,6 +31,8 @@ public class CacheProducer {
 					"     <state-transfer timeout=\"480000\" await-initial-transfer=\"true\" />" +
 					"   </distributed-cache-configuration>" +
 					"</cache-container></infinispan>";
+
+	public static final String CACHE_NAME = "puzzle";
 
 	@Inject
 	private Logger log;
@@ -54,6 +56,8 @@ public class CacheProducer {
 
 	@Produces
 	public RemoteCache<Integer, Puzzle> producePuzzleCache() {
+		log.trace( "Produce a remote cache controller from a remote cache manager");
+
 		return cacheManager.getCache( CACHE_NAME );
 	}
 }
