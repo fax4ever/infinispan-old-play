@@ -31,7 +31,7 @@ public class CacheManagerProducer {
 	@Produces
 	public RemoteCacheManager getProtoCacheManager() {
 
-		log.trace("remote cache manager :: produce");
+		log.trace( "remote cache manager :: produce" );
 		ProtoStreamMarshaller marshaller = new ProtoStreamMarshaller();
 
 		Configuration config = new ConfigurationBuilder()
@@ -51,24 +51,26 @@ public class CacheManagerProducer {
 		ProtoSchemaBuilder protoSchemaBuilder = new ProtoSchemaBuilder();
 		try {
 			String generatedSchema = protoSchemaBuilder.fileName( PROTO_SCHEMA_NAME )
-				.packageName( Puzzle.class.getPackage().getName() )
-				.addClass( Puzzle.class )
-				.build( serCtx );
+					.packageName( Puzzle.class.getPackage().getName() )
+					.addClass( Puzzle.class )
+					.build( serCtx );
 
-			log.info( "--- GENERATED SCHEMA ---" + generatedSchema );
+			log.info( "--- GENERATED SCHEMA ---" );
+			log.info( generatedSchema );
 			serCtx.registerMarshaller( new PuzzleMarshaller() );
 
 			String cacheName = ProtobufMetadataManagerConstants.PROTOBUF_METADATA_CACHE_NAME;
 			RemoteCache<String, String> metadataCache = remoteCacheManager.getCache( cacheName );
-			metadataCache.put(PROTO_SCHEMA_NAME, generatedSchema);
+			metadataCache.put( PROTO_SCHEMA_NAME, generatedSchema );
 
-			String errors = metadataCache.get(ProtobufMetadataManagerConstants.ERRORS_KEY_SUFFIX);
-			if (errors != null) {
-				throw new IllegalStateException("Some Protocol Buffer schema files contain errors:\n" + errors);
+			String errors = metadataCache.get( ProtobufMetadataManagerConstants.ERRORS_KEY_SUFFIX );
+			if ( errors != null ) {
+				throw new IllegalStateException( "Some Protocol Buffer schema files contain errors:\n" + errors );
 			}
 
-		} catch (Exception e) {
-			throw new IllegalStateException("An error occurred initializing ProtoStream Protocol Buffer marshaller:", e);
+		}
+		catch (Exception e) {
+			throw new IllegalStateException( "An error occurred initializing ProtoStream Protocol Buffer marshaller:", e );
 		}
 	}
 }
