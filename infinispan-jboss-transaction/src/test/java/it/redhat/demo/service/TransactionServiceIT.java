@@ -1,6 +1,7 @@
 package it.redhat.demo.service;
 
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
 
 import java.io.File;
 import javax.inject.Inject;
@@ -10,7 +11,6 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import org.infinispan.client.hotrod.RemoteCache;
-import org.infinispan.client.hotrod.RemoteCacheManager;
 
 import org.jboss.arquillian.container.test.api.Deployment;
 import org.jboss.arquillian.junit.Arquillian;
@@ -36,9 +36,6 @@ public class TransactionServiceIT {
 	@Inject
 	private RemoteCache<Integer, Puzzle> puzzleCache;
 
-	@Inject
-	private RemoteCacheManager cacheManager;
-
 	@Test
 	public void test_implicitTransaction() throws Exception {
 		utx.begin();
@@ -54,8 +51,6 @@ public class TransactionServiceIT {
 		utx.rollback();
 
 		puzzle = puzzleCache.get( 2 );
-		// it fails: assertNull(puzzle);
-		// the entry is still present
-		assertNotNull( puzzle );
+		assertNull( puzzle );
 	}
 }

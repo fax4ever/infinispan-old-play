@@ -22,11 +22,8 @@ public class CacheProducer {
 	private static final String OGM_BASIC_CONFIG =
 			"<infinispan><cache-container>" +
 					"	<distributed-cache-configuration name=\"%s\">" +
-					"     <locking striping=\"false\" acquire-timeout=\"10000\" concurrency-level=\"50\" isolation=\"READ_COMMITTED\"/>" +
-					"     <transaction mode=\"NON_DURABLE_XA\" />" +
-					"     <expiration max-idle=\"-1\" />" +
-					"     <indexing index=\"NONE\" />" +
-					"     <state-transfer timeout=\"480000\" await-initial-transfer=\"true\" />" +
+					"     <locking isolation=\"REPEATABLE_READ\"/>" +
+					"     <transaction locking=\"PESSIMISTIC\" mode=\"NON_DURABLE_XA\" />" +
 					"   </distributed-cache-configuration>" +
 					"</cache-container></infinispan>";
 
@@ -38,9 +35,13 @@ public class CacheProducer {
 	@Inject
 	private RemoteCacheManager cacheManager;
 
+	@Inject
+	private RemoteCacheManager temporaryCacheManager;
+
 	@PostConstruct
 	private void onStartup() {
-		cacheManager.administration().getOrCreateCache( CACHE_NAME, getCacheConfiguration( CACHE_NAME ) );
+		temporaryCacheManager.administration().getOrCreateCache( CACHE_NAME, getCacheConfiguration( CACHE_NAME ) );
+		temporaryCacheManager.stop();
 	}
 
 	@PreDestroy

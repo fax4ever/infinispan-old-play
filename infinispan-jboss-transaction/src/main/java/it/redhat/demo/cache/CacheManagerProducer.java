@@ -8,6 +8,7 @@ import org.infinispan.client.hotrod.RemoteCache;
 import org.infinispan.client.hotrod.RemoteCacheManager;
 import org.infinispan.client.hotrod.configuration.Configuration;
 import org.infinispan.client.hotrod.configuration.ConfigurationBuilder;
+import org.infinispan.client.hotrod.configuration.TransactionMode;
 import org.infinispan.client.hotrod.marshall.ProtoStreamMarshaller;
 import org.infinispan.protostream.SerializationContext;
 import org.infinispan.protostream.annotations.ProtoSchemaBuilder;
@@ -39,6 +40,8 @@ public class CacheManagerProducer {
 				.addServer()
 				.host( DEFAULT_HOTROD_BIND_ADDRESS )
 				.port( DEFAULT_HOTROD_PORT )
+				.transaction()
+					.transactionMode( TransactionMode.NON_XA )
 				.build();
 
 		RemoteCacheManager remoteCacheManager = new RemoteCacheManager( config );
@@ -48,9 +51,8 @@ public class CacheManagerProducer {
 	}
 
 	private void configureProtoMarshaller(SerializationContext serCtx, RemoteCacheManager remoteCacheManager) {
-		ProtoSchemaBuilder protoSchemaBuilder = new ProtoSchemaBuilder();
 		try {
-			String generatedSchema = protoSchemaBuilder.fileName( PROTO_SCHEMA_NAME )
+			String generatedSchema = new ProtoSchemaBuilder().fileName( PROTO_SCHEMA_NAME )
 					.packageName( Puzzle.class.getPackage().getName() )
 					.addClass( Puzzle.class )
 					.build( serCtx );
@@ -60,14 +62,13 @@ public class CacheManagerProducer {
 			serCtx.registerMarshaller( new PuzzleMarshaller() );
 
 			String cacheName = ProtobufMetadataManagerConstants.PROTOBUF_METADATA_CACHE_NAME;
-			RemoteCache<String, String> metadataCache = remoteCacheManager.getCache( cacheName );
+			RemoteCache<String, String> metadataCache = remoteCacheManager.getCache( cacheName, TransactionMode.NONE );
 			metadataCache.put( PROTO_SCHEMA_NAME, generatedSchema );
 
 			String errors = metadataCache.get( ProtobufMetadataManagerConstants.ERRORS_KEY_SUFFIX );
 			if ( errors != null ) {
 				throw new IllegalStateException( "Some Protocol Buffer schema files contain errors:\n" + errors );
 			}
-
 		}
 		catch (Exception e) {
 			throw new IllegalStateException( "An error occurred initializing ProtoStream Protocol Buffer marshaller:", e );
