@@ -13,8 +13,6 @@ import org.infinispan.commons.configuration.XMLStringConfiguration;
 
 import org.slf4j.Logger;
 
-import it.redhat.demo.model.Puzzle;
-
 @Singleton
 @Startup
 public class CacheProducer {
@@ -50,8 +48,8 @@ public class CacheProducer {
 	}
 
 	@Produces
-	public RemoteCache<Integer, Puzzle> producePuzzleCache() {
-		log.trace( "Produce a remote cache controller from a remote cache manager");
+	public RemoteCache<Integer, Integer> producePuzzleCache() {
+		log.trace( "Produce a remote cache controller from a remote cache manager" );
 
 		return cacheManager.getCache( CACHE_NAME );
 	}

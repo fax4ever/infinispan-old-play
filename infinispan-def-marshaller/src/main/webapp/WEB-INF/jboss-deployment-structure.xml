@@ -3,7 +3,7 @@
 <jboss-deployment-structure xmlns="urn:jboss:deployment-structure:1.2">
     <deployment>
         <dependencies>
-            <module name="org.infinispan.remote" slot="ispn-9.3" />
+            <module name="org.infinispan.remote" slot="ispn-9.3" export="true" services="import" />
         </dependencies>
         <exclusions>
             <module name="org.jgroups"/>
