@@ -1,6 +1,7 @@
 package it.redhat.demo.cache;
 
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.concurrent.ConcurrentHashMap;
 
 import org.infinispan.client.hotrod.RemoteCache;
@@ -10,6 +11,9 @@ import org.infinispan.commons.configuration.XMLStringConfiguration;
 public class CacheFactory {
 
 	public static final String TRANSACTIONAL_SERVER_SIDE_DEFINED_CACHE = "special-cache";
+	public static final String NON_TRANSACTIONAL_SERVER_SIDE_DEFINED_CACHE = "default";
+
+	private static final String[] SERVER_SIDE_DEFINED_CACHES = { TRANSACTIONAL_SERVER_SIDE_DEFINED_CACHE, NON_TRANSACTIONAL_SERVER_SIDE_DEFINED_CACHE };
 	private static final String TRANSACTIONAL_CLIENT_SIDE_DEFINED_CONFIG =
 			"<infinispan><cache-container>" +
 					"	<distributed-cache-configuration name=\"%s\">" +
@@ -26,8 +30,8 @@ public class CacheFactory {
 	}
 
 	public RemoteCache<String, String> getCache(String name) {
-		// this cache is already defined on Infinispan server config
-		if ( TRANSACTIONAL_SERVER_SIDE_DEFINED_CACHE.equals( name )) {
+		// skip creation if cache is already defined on Infinispan server config
+		if ( Arrays.asList( SERVER_SIDE_DEFINED_CACHES ).contains( name ) ) {
 			return manager.getCache( name );
 		}
 

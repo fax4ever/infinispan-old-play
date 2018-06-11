@@ -1,4 +1,6 @@
 import static org.fest.assertions.Assertions.assertThat;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.fail;
 
 import javax.transaction.TransactionManager;
 
@@ -8,6 +10,7 @@ import org.junit.Test;
 
 import org.infinispan.client.hotrod.RemoteCache;
 import org.infinispan.client.hotrod.RemoteCacheManager;
+import org.infinispan.client.hotrod.exceptions.HotRodClientException;
 
 import it.redhat.demo.cache.CacheFactory;
 import it.redhat.demo.cache.CacheManagerFactory;
@@ -71,5 +74,21 @@ public class TransactionalIT {
 		userTrx.begin();
 		assertThat( cache.get( "Greetings" ) ).isEqualTo( "Hi!" );
 		userTrx.commit();
+	}
+
+	@Test
+	public void test_useNonTransactionalCache() throws Exception {
+		RemoteCache<String, String> cache = cacheRepo.getCache( CacheFactory.NON_TRANSACTIONAL_SERVER_SIDE_DEFINED_CACHE );
+
+		TransactionManager userTrx = cache.getTransactionManager();
+		userTrx.begin();
+
+		try {
+			cache.put( "Greetings", "Hi!" );
+			fail( "exception expected" );
+		} catch (HotRodClientException hotException) {
+			// org.infinispan.client.hotrod.exceptions.HotRodClientException:Request for messageId=4 returned server error (status=0x85): java.lang.IllegalStateException: ISPN006020: Cache 'default' is not transactional to execute a client transaction
+			assertThat( hotException.getMessage() ).contains( "ISPN004084" );
+		}
 	}
 }
