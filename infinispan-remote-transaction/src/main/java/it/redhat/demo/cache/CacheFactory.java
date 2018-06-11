@@ -9,7 +9,8 @@ import org.infinispan.commons.configuration.XMLStringConfiguration;
 
 public class CacheFactory {
 
-	private static final String CLASSIC_TRANSACTIONAL_SINGLE_CACHE_XML_CONFIG =
+	public static final String TRANSACTIONAL_SERVER_SIDE_DEFINED_CACHE = "special-cache";
+	private static final String TRANSACTIONAL_CLIENT_SIDE_DEFINED_CONFIG =
 			"<infinispan><cache-container>" +
 					"	<distributed-cache-configuration name=\"%s\">" +
 					"     <locking isolation=\"REPEATABLE_READ\"/>" +
@@ -25,6 +26,11 @@ public class CacheFactory {
 	}
 
 	public RemoteCache<String, String> getCache(String name) {
+		// this cache is already defined on Infinispan server config
+		if ( TRANSACTIONAL_SERVER_SIDE_DEFINED_CACHE.equals( name )) {
+			return manager.getCache( name );
+		}
+
 		createdCaches.computeIfAbsent( name, cacheName -> {
 			manager.administration().createCache( cacheName, getConfigurationByName( cacheName ) );
 			return true;
@@ -45,6 +51,6 @@ public class CacheFactory {
 	}
 
 	private XMLStringConfiguration getConfigurationByName(String cacheName) {
-		return new XMLStringConfiguration( String.format( CLASSIC_TRANSACTIONAL_SINGLE_CACHE_XML_CONFIG, cacheName, CacheManagerFactory.TRANSACTION_MODE ) );
+		return new XMLStringConfiguration( String.format( TRANSACTIONAL_CLIENT_SIDE_DEFINED_CONFIG, cacheName, CacheManagerFactory.TRANSACTION_MODE ) );
 	}
 }

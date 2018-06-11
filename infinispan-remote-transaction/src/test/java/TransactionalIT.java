@@ -54,4 +54,22 @@ public class TransactionalIT {
 		assertThat( cache.get( "Greetings" ) ).isEqualTo( "Hi!" );
 		userTrx.commit();
 	}
+
+	//@Test
+	//TODO: Error on commit() :(
+	public void test_withTransactions_serverSideDefinedCache() throws Exception {
+		RemoteCache<String, String> cache = cacheRepo.getCache( CacheFactory.TRANSACTIONAL_SERVER_SIDE_DEFINED_CACHE );
+
+		TransactionManager userTrx = cache.getTransactionManager();
+		userTrx.begin();
+		cache.put( "Greetings", "Hi!" );
+
+//		WARN: ISPN004005: Error received from the server: javax.transaction.InvalidTransactionException: WFTXN0002: Transaction is not a supported instance: TransactionImpl{xid=Xid{formatId=1213355096, globalTransactionId=ACE72FF3C45B1C95ECDD0CABA4474FBD00000163EF327F9A0000000000000002,branchQualifier=ACE72FF3C45B1C95ECDD0CABA4474FBD00000163EF327F9A0000000000000002}, status=ACTIVE}
+//		javax.transaction.RollbackException: Transaction marked as rollback only.
+		userTrx.commit();
+
+		userTrx.begin();
+		assertThat( cache.get( "Greetings" ) ).isEqualTo( "Hi!" );
+		userTrx.commit();
+	}
 }

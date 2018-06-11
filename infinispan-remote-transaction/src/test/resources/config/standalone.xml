@@ -310,6 +310,13 @@
                 </distributed-cache-configuration>
                 <distributed-cache name="default"/>
                 <replicated-cache name="repl" configuration="replicated"/>
+
+                <!-- The only chang to clustered.xml -->
+                <!-- Add server side defined transactional cache -->
+                <distributed-cache name="special-cache">
+                    <locking isolation="REPEATABLE_READ"/>
+                    <transaction mode="NON_XA" locking="PESSIMISTIC"/>
+                </distributed-cache>
             </cache-container>
         </subsystem>
         <subsystem xmlns="urn:infinispan:server:endpoint:9.3">
