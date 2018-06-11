@@ -33,6 +33,7 @@
         <module>infinispan-query-play</module>
         <module>infinispan-jboss-transaction</module>
         <module>infinispan-def-marshaller</module>
+        <module>infinispan-configuration-test</module>
     </modules>
 
 </project>
