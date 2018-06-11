@@ -31,17 +31,14 @@ public class TransactionServiceIT {
 	private UserTransaction utx;
 
 	@Inject
-	private RemoteCache<Integer, Integer> puzzleCache;
+	private RemoteCache<String, String> puzzleCache;
 
 	@Test
 	public void test_implicitTransaction() throws Exception {
 		utx.begin();
-
-		puzzleCache.put( 1, 1 );
-		puzzleCache.put( 2, 2 );
-
+		puzzleCache.put( "ciao", "ciao" );
 		utx.commit();
 
-		assertNotNull( puzzleCache.get( 1 ) );
+		assertNotNull( puzzleCache.get( "ciao" ) );
 	}
 }

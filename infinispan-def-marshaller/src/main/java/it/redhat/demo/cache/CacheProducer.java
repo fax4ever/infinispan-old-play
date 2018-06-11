@@ -9,6 +9,7 @@ import javax.inject.Inject;
 
 import org.infinispan.client.hotrod.RemoteCache;
 import org.infinispan.client.hotrod.RemoteCacheManager;
+import org.infinispan.client.hotrod.configuration.TransactionMode;
 import org.infinispan.commons.configuration.XMLStringConfiguration;
 
 import org.slf4j.Logger;
@@ -21,7 +22,7 @@ public class CacheProducer {
 			"<infinispan><cache-container>" +
 					"	<distributed-cache-configuration name=\"%s\">" +
 					"     <locking isolation=\"REPEATABLE_READ\"/>" +
-					"     <transaction locking=\"PESSIMISTIC\" mode=\"NON_DURABLE_XA\" />" +
+					"     <transaction locking=\"PESSIMISTIC\" mode=\"%s\" />" +
 					"   </distributed-cache-configuration>" +
 					"</cache-container></infinispan>";
 
@@ -44,11 +45,11 @@ public class CacheProducer {
 	}
 
 	private XMLStringConfiguration getCacheConfiguration(String cacheName) {
-		return new XMLStringConfiguration( String.format( OGM_BASIC_CONFIG, cacheName ) );
+		return new XMLStringConfiguration( String.format( OGM_BASIC_CONFIG, cacheName, TransactionMode.NON_DURABLE_XA ) );
 	}
 
 	@Produces
-	public RemoteCache<Integer, Integer> producePuzzleCache() {
+	public RemoteCache<String, String> producePuzzleCache() {
 		log.trace( "Produce a remote cache controller from a remote cache manager" );
 
 		return cacheManager.getCache( CACHE_NAME );

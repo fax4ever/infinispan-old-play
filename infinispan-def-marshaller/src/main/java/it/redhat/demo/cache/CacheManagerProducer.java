@@ -29,7 +29,7 @@ public class CacheManagerProducer {
 				.host( DEFAULT_HOTROD_BIND_ADDRESS )
 				.port( DEFAULT_HOTROD_PORT )
 				.transaction()
-				.transactionMode( TransactionMode.NON_XA )
+				.transactionMode( TransactionMode.NON_DURABLE_XA )
 				.classLoader( CacheManagerProducer.class.getClassLoader() )
 				.build();
 
