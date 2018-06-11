@@ -11,6 +11,8 @@ public class CacheManagerFactory {
 	private static final String DEFAULT_HOTROD_BIND_ADDRESS = "127.0.0.1";
 	private static final int DEFAULT_HOTROD_PORT = 11222;
 
+	public static final TransactionMode TRANSACTION_MODE = TransactionMode.NON_XA;
+
 	public RemoteCacheManager create() {
 		Configuration config = new ConfigurationBuilder()
 				.marshaller( new GenericJBossMarshaller() )
@@ -18,7 +20,7 @@ public class CacheManagerFactory {
 				.host( DEFAULT_HOTROD_BIND_ADDRESS )
 				.port( DEFAULT_HOTROD_PORT )
 				.transaction()
-				.transactionMode( TransactionMode.NON_DURABLE_XA )
+				.transactionMode( TRANSACTION_MODE )
 				.build();
 
 		return new RemoteCacheManager( config );

@@ -50,6 +50,8 @@ public class TransactionalIT {
 //		java.util.concurrent.ExecutionException: org.infinispan.client.hotrod.exceptions.HotRodClientException:Request for messageId=6 returned server error (status=0x85): java.lang.IllegalArgumentException: Unable to decorate cache
 		userTrx.commit();
 
+		userTrx.begin();
 		assertThat( cache.get( "Greetings" ) ).isEqualTo( "Hi!" );
+		userTrx.commit();
 	}
 }

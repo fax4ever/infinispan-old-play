@@ -14,11 +14,12 @@
         <maven.compiler.target>1.8</maven.compiler.target>
         <maven.compiler.source>1.8</maven.compiler.source>
 
-        <infinispan.version>9.3.0.CR1</infinispan.version>
+        <infinispan.version>9.3.0-SNAPSHOT</infinispan.version>
         <slf4j.version>1.7.25</slf4j.version>
         <junit.version>4.12</junit.version>
 
         <infinispan.name>infinispan-server-${infinispan.version}</infinispan.name>
+        <infinispan.directory>${project.build.directory}/${infinispan.name}</infinispan.directory>
     </properties>
 
     <dependencyManagement>
@@ -84,6 +85,7 @@
             <plugin>
                 <groupId>org.wildfly.build</groupId>
                 <artifactId>wildfly-server-provisioning-maven-plugin</artifactId>
+                <version>1.2.10.Final</version>
                 <executions>
                     <execution>
                         <id>infinispan-server</id>
@@ -94,6 +96,31 @@
                         <configuration>
                             <config-file>provisioning-infinispan.xml</config-file>
                             <server-name>${infinispan.name}</server-name>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-resources-plugin</artifactId>
+                <version>3.1.0</version>
+                <executions>
+                    <!-- Update configurations -->
+                    <execution>
+                        <id>update-jboss-config</id>
+                        <phase>process-test-resources</phase>
+                        <goals>
+                            <goal>copy-resources</goal>
+                        </goals>
+                        <configuration>
+                            <outputDirectory>${infinispan.directory}/standalone/configuration</outputDirectory>
+                            <overwrite>true</overwrite>
+                            <resources>
+                                <resource>
+                                    <directory>${basedir}/src/test/resources/config</directory>
+                                </resource>
+                            </resources>
                         </configuration>
                     </execution>
                 </executions>

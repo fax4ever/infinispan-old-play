@@ -13,7 +13,7 @@ public class CacheFactory {
 			"<infinispan><cache-container>" +
 					"	<distributed-cache-configuration name=\"%s\">" +
 					"     <locking isolation=\"REPEATABLE_READ\"/>" +
-					"     <transaction locking=\"PESSIMISTIC\" mode=\"NON_DURABLE_XA\" />" +
+					"     <transaction locking=\"PESSIMISTIC\" mode=\"%s\" />" +
 					"   </distributed-cache-configuration>" +
 					"</cache-container></infinispan>";
 
@@ -45,6 +45,6 @@ public class CacheFactory {
 	}
 
 	private XMLStringConfiguration getConfigurationByName(String cacheName) {
-		return new XMLStringConfiguration( String.format( CLASSIC_TRANSACTIONAL_SINGLE_CACHE_XML_CONFIG, cacheName ) );
+		return new XMLStringConfiguration( String.format( CLASSIC_TRANSACTIONAL_SINGLE_CACHE_XML_CONFIG, cacheName, CacheManagerFactory.TRANSACTION_MODE ) );
 	}
 }
