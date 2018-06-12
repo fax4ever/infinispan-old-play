@@ -37,25 +37,32 @@ public class TransactionalIT {
 		assertThat( cache.get( "Greetings" ) ).isEqualTo( "Hi!" );
 	}
 
-	//@Test
-	//TODO: Error on commit() :(
+	@Test
 	public void test_withTransactions() throws Exception {
 		RemoteCache<String, String> cache = cacheRepo.getCache( "my-cache-name" );
 
 		TransactionManager userTrx = cache.getTransactionManager();
 		userTrx.begin();
 		cache.put( "Greetings", "Hi!" );
-
-//		Jun 11, 2018 2:03:28 PM org.infinispan.client.hotrod.impl.protocol.Codec20 checkForErrorsInResponseStatus
-//		WARN: ISPN004005: Error received from the server: java.lang.IllegalArgumentException: Unable to decorate cache
-//		Jun 11, 2018 2:03:28 PM org.infinispan.client.hotrod.impl.transaction.TransactionContext prepareContext
-//		WARN: ISPN004086: Exception caught while preparing transaction Xid{formatId=1213355096, globalTransactionId=B601E26ED84D4C25139634C4D13346E000000163EEBAC9B00000000000000001,branchQualifier=B601E26ED84D4C25139634C4D13346E000000163EEBAC9B00000000000000001}
-//		java.util.concurrent.ExecutionException: org.infinispan.client.hotrod.exceptions.HotRodClientException:Request for messageId=6 returned server error (status=0x85): java.lang.IllegalArgumentException: Unable to decorate cache
 		userTrx.commit();
 
 		userTrx.begin();
 		assertThat( cache.get( "Greetings" ) ).isEqualTo( "Hi!" );
 		userTrx.commit();
+	}
+
+	@Test
+	public void test_rollback() throws Exception {
+		RemoteCache<String, String> cache = cacheRepo.getCache( "just-another-cache" );
+
+		TransactionManager userTrx = cache.getTransactionManager();
+
+		userTrx.begin();
+		cache.put( "Greetings", "Hi!" );
+		assertThat( cache.get( "Greetings" ) ).isEqualTo( "Hi!" );
+		userTrx.rollback();
+
+		assertThat( cache.get( "Greetings" ) ).isNull();
 	}
 
 	//@Test
