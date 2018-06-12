@@ -32,7 +32,7 @@
         <module>infinispan-one-to-many-marshaller</module>
         <module>infinispan-query-play</module>
         <module>infinispan-jboss-transaction</module>
-        <module>infinispan-def-marshaller</module>
+        <module>infinispan-hotrod-counter</module>
         <module>infinispan-configuration-test</module>
         <module>infinispan-remote-transaction</module>
     </modules>
