@@ -36,8 +36,7 @@ public class TransactionServiceIT {
 	@Inject
 	private RemoteCache<Integer, Puzzle> puzzleCache;
 
-	//@Test
-	//TODO: Transactions should work
+	@Test
 	public void test_withTransactions() throws Exception {
 		utx.begin();
 		puzzleCache.put( 1, new Puzzle( "ciao1" ) );

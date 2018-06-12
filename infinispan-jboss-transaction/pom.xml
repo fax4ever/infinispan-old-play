@@ -20,7 +20,8 @@
         <wildfly.version>13.0.0.Final</wildfly.version>
 
         <!-- Data Store Infinispan -->
-        <infinispan.version>9.3.0.CR1</infinispan.version>
+        <!-- TODO: waiting for ISPN 9.3.0.Final -->
+        <infinispan.version>9.3.0-SNAPSHOT</infinispan.version>
 
         <!-- SLF4J -->
         <slf4j.version>1.7.22</slf4j.version>
