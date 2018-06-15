@@ -12,8 +12,11 @@ public class CacheFactory {
 
 	public static final String TRANSACTIONAL_SERVER_SIDE_DEFINED_CACHE = "special-cache";
 	public static final String NON_TRANSACTIONAL_SERVER_SIDE_DEFINED_CACHE = "default";
+	public static final String TRANSACTIONAL_SERVER_SIDE_DEFINED_WITH_CONFIGURATION_CACHE = "use-trx-config-cache";
 
-	private static final String[] SERVER_SIDE_DEFINED_CACHES = { TRANSACTIONAL_SERVER_SIDE_DEFINED_CACHE, NON_TRANSACTIONAL_SERVER_SIDE_DEFINED_CACHE };
+	private static final String[] SERVER_SIDE_DEFINED_CACHES = {
+			TRANSACTIONAL_SERVER_SIDE_DEFINED_CACHE, NON_TRANSACTIONAL_SERVER_SIDE_DEFINED_CACHE, TRANSACTIONAL_SERVER_SIDE_DEFINED_WITH_CONFIGURATION_CACHE
+	};
 	private static final String TRANSACTIONAL_CLIENT_SIDE_DEFINED_CONFIG =
 			"<infinispan><cache-container>" +
 					"	<distributed-cache-configuration name=\"%s\">" +

@@ -267,6 +267,7 @@
                 <transport lock-timeout="60000"/>
                 <global-state/>
                 <distributed-cache-configuration name="transactional">
+                    <locking isolation="REPEATABLE_READ"/>
                     <transaction mode="NON_XA" locking="PESSIMISTIC"/>
                 </distributed-cache-configuration>
                 <distributed-cache-configuration name="async" mode="ASYNC"/>
@@ -317,6 +318,7 @@
                     <locking isolation="REPEATABLE_READ"/>
                     <transaction mode="NON_XA" locking="PESSIMISTIC"/>
                 </distributed-cache>
+                <distributed-cache name="use-trx-config-cache" configuration="transactional"/>
             </cache-container>
         </subsystem>
         <subsystem xmlns="urn:infinispan:server:endpoint:9.3">

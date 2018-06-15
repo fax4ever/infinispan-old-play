@@ -79,6 +79,20 @@ public class TransactionalIT {
 	}
 
 	@Test
+	public void test_withTransactions_serverSideDefined_usingConfiguration_Cache() throws Exception {
+		RemoteCache<String, String> cache = cacheRepo.getCache( CacheFactory.TRANSACTIONAL_SERVER_SIDE_DEFINED_WITH_CONFIGURATION_CACHE );
+
+		TransactionManager userTrx = cache.getTransactionManager();
+		userTrx.begin();
+		cache.put( "Greetings", "Hi!" );
+		userTrx.commit();
+
+		userTrx.begin();
+		assertThat( cache.get( "Greetings" ) ).isEqualTo( "Hi!" );
+		userTrx.commit();
+	}
+
+	@Test
 	public void test_useNonTransactionalCache() throws Exception {
 		RemoteCache<String, String> cache = cacheRepo.getCache( CacheFactory.NON_TRANSACTIONAL_SERVER_SIDE_DEFINED_CACHE );
 
@@ -92,6 +106,9 @@ public class TransactionalIT {
 		catch (HotRodClientException hotException) {
 			// org.infinispan.client.hotrod.exceptions.HotRodClientException:Request for messageId=4 returned server error (status=0x85): java.lang.IllegalStateException: ISPN006020: Cache 'default' is not transactional to execute a client transaction
 			assertThat( hotException.getMessage() ).contains( "ISPN004084" );
+		}
+		finally {
+			userTrx.rollback();
 		}
 	}
 }
