@@ -15,6 +15,7 @@ import org.infinispan.query.remote.client.ProtobufMetadataManagerConstants;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import it.redhat.demo.model.Message;
 import it.redhat.demo.model.MovieMarshaller;
 import it.redhat.demo.model.SimpleMarshaller;
 
@@ -47,6 +48,7 @@ public class CacheManagerFactory {
 		registerProtoFilesOnClient( serCtx );
 		serCtx.registerMarshaller( new SimpleMarshaller() );
 		serCtx.registerMarshaller( new MovieMarshaller() );
+		serCtx.registerMarshaller( new Message.Marshaller() );
 
 		String cacheName = ProtobufMetadataManagerConstants.PROTOBUF_METADATA_CACHE_NAME;
 		RemoteCache<String, String> metadataCache = remoteCacheManager.getCache( cacheName );
