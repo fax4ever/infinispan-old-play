@@ -14,7 +14,7 @@ public class Message {
 	public Message() {
 	}
 
-	public Message(Long id, String body, String username) {
+	public Message(Long id, String username, String body) {
 		this.id = id;
 		this.body = body;
 		this.moment = System.currentTimeMillis();

@@ -16,7 +16,7 @@ public class CacheRepo {
 			"     <locking striping=\"false\" acquire-timeout=\"10000\" concurrency-level=\"50\" isolation=\"READ_COMMITTED\"/>" +
 			"     <transaction mode=\"NON_DURABLE_XA\" />" +
 			"     <expiration max-idle=\"-1\" />" +
-			"     <indexing index=\"NONE\" />" +
+			"     <indexing index=\"LOCAL\" auto-config=\"true\" />" +
 			"     <state-transfer timeout=\"480000\" await-initial-transfer=\"true\" />" +
 			"   </distributed-cache-configuration>" +
 			"</cache-container></infinispan>";

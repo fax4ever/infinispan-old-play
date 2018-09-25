@@ -11,8 +11,6 @@ import org.junit.Test;
 import org.infinispan.client.hotrod.RemoteCache;
 import org.infinispan.client.hotrod.RemoteCacheManager;
 import org.infinispan.client.hotrod.Search;
-import org.infinispan.client.hotrod.exceptions.HotRodClientException;
-import org.infinispan.query.dsl.IndexedQueryMode;
 import org.infinispan.query.dsl.Query;
 import org.infinispan.query.dsl.QueryFactory;
 
@@ -71,15 +69,12 @@ public class FullTextQueryIT {
 		messageCache = null;
 	}
 
-	/*
-	 * It should work :(
-	 */
-	@Test(expected = HotRodClientException.class)
+	@Test
 	public void findByTerm() {
 		QueryFactory qf = Search.getQueryFactory( messageCache );
-		Query query = qf.create( "from ProtoModel.Message where body:'Sweet'", IndexedQueryMode.FETCH );
+		Query query = qf.create( "from ProtoModel.Message where body:'Sweet'" );
 		List<Message> list = query.list();
-		assertEquals(2, list.size());
+		assertEquals(5, list.size());
 	}
 
 }
